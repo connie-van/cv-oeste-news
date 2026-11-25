@@ -9,7 +9,10 @@ These rules are read at the start of every scheduled update. Follow all of them.
 
 ## Writing
 4. Read each article (WebFetch) before writing it up. Write everything in plain English in your own words; never copy article sentences. Never invent details. Only add stories with a real https link.
-5. Set media to "photo" or "video" only when the article has real photos or video of the story itself — not generic file/stock photos.
+5. Photos and video (Bean may ask to turn this off — if rules.md ever says media is off, add no image/video fields):
+   a. Photo: if an article's own preview image (og:image) is a real photo of the story — the people, place or event — add "image": {"src": <the outlet's https image URL>, "credit": "Photo: <outlet>" or "Photo: supplied, via <outlet>", "alt": <short description>}. Never use generic, file ("Archivo"), stock (e.g. Pexels) or "genérica" images. Never download or copy images; only link the outlet's own URL.
+   b. Photos of private people (victims, suspects, family) only when a news outlet published them with its own story — never from social media or other sources.
+   c. Video: if the outlet published the story's video on YouTube, add "video": {"provider": "youtube", "id": <video id>, "credit": "Video: <outlet>"}. Only the outlet's own upload.
 
 ## Archive and duplicates
 6. news.json is a permanent archive that powers the calendar. Never delete existing items or rewrite their original content.

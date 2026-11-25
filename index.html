@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-build="1234f21f">
+<html lang="en" data-build="4a4c2b64">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -57,7 +57,7 @@ h2{font:400 28px/1.1 Newsreader,Georgia,serif;margin:30px 4px 12px}
 .chips button[aria-pressed=true]{background:var(--soft);color:var(--bg)}
 button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
 .item{display:block;border-radius:24px;padding:18px 20px;margin:12px 0;color:var(--ink);text-decoration:none;position:relative}
-.item .hd{display:grid;grid-template-columns:minmax(0,1fr) 72px;gap:10px;align-items:start}
+.item .hd{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:start}
 .item svg{width:72px;height:72px}
 .meta{display:flex;flex-wrap:wrap;gap:2px 12px;font-size:13px;color:var(--mute)}
 .meta b{color:var(--ink);font-weight:600}
@@ -110,6 +110,11 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
 .orig{display:flex;justify-content:center;align-items:center;width:100%;min-height:52px;margin-top:12px;border-radius:99px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);font:600 16px "Instrument Sans",sans-serif;text-decoration:none}
 @media (prefers-reduced-motion:no-preference){.sheet:not([hidden]) .in{animation:up .28s ease-out}@keyframes up{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}}
 footer{font-size:13px;opacity:.7;margin:28px 4px 0}
+.pic{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:16px;margin:12px 0 0;background:rgba(21,21,21,.08)}
+.cred{font-size:12px;color:var(--mute);margin-top:4px}
+.sheet .pic{margin-top:18px;aspect-ratio:4/3}
+.vid{position:relative;width:100%;aspect-ratio:16/9;margin-top:18px;border-radius:16px;overflow:hidden;background:#151515}
+.vid iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 html{overscroll-behavior-y:none}
 .ptr{position:fixed;left:50%;top:0;z-index:5;width:44px;height:44px;margin-left:-22px;border-radius:50%;background:#fff;border:1.5px solid #151515;box-shadow:0 2px 8px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;transform:translateY(-60px);opacity:0;pointer-events:none}
 .ptr svg{width:24px;height:24px}
@@ -175,6 +180,9 @@ const D={
  "Case":'<circle cx="30" cy="30" r="18"/><path d="M43 43 L64 64"/><path d="M22 30 h16M30 22 v16"/>'
 };
 const doodle=c=>`<svg viewBox="0 0 72 72" fill="none" stroke="#151515" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${D[c]||D.Development}</svg>`;
+const imgOK=i=>i.image&&safe(i.image.src);
+const picHTML=(i,big)=>imgOK(i)?`<img class="pic" src="${esc(i.image.src)}" alt="${esc(i.image.alt||i.title)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.closest('[data-m]')&&this.closest('[data-m]').classList.add('noimg');this.nextElementSibling&&this.nextElementSibling.remove();this.remove()"><div class="cred">${esc(i.image.credit||"Photo: "+i.source)}</div>`:"";
+const vidHTML=i=>{const v=i.video;if(!v)return"";const id=String(v.id||"").replace(/[^\w-]/g,"");if(v.provider==="youtube"&&id)return `<div class="vid"><iframe src="https://www.youtube-nocookie.com/embed/${id}" title="${esc(v.title||i.title)}" allow="encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>${v.credit?`<div class="cred">${esc(v.credit)}</div>`:""}`;return""};
 const ML={photo:"Photo at source",photos:"Photos at source",video:"Video at source"};
 let data={items:[],tracking:[]},town="All",day="",calOpen=false,mon=null;
 try{town=localStorage.getItem("oeste-town")||"All"}catch(e){}
@@ -185,7 +193,7 @@ const todayISO=()=>new Date().toLocaleDateString("en-CA",{timeZone:"America/Puer
 
 function drawChips(){chips.innerHTML=TOWNS.map(t=>`<button type="button" data-t="${esc(t)}" aria-pressed="${t===town}">${esc(t)}</button>`).join("")+`<button type="button" id="calBtn" aria-pressed="${calOpen||!!day}">Calendar</button>`}
 function card(i){const m=ML[i.media];
- return `<button type="button" class="item" data-s="${esc(i.id)}" style="background:${TC[i.town]||"var(--sky)"}"><div class="hd"><div><div class="meta"><b>${esc(i.town)}</b><span>${esc(i.cat)}</span><time>${fmt(i.date)}</time></div><h4>${esc(i.title)}</h4></div>${doodle(i.cat)}</div><p>${esc(i.summary)}</p><div class="foot"><span>${esc(i.source)}</span>${i.ref?`<span class="flag">Update</span>`:lastUpd(i)?`<span class="flag">Updated ${fmt(lastUpd(i))}</span>`:m?`<span class="media">${m}</span>`:""}</div></button>`}
+ return `<button type="button" class="item" data-s="${esc(i.id)}" style="background:${TC[i.town]||"var(--sky)"}"><div class="hd"><div><div class="meta"><b>${esc(i.town)}</b><span>${esc(i.cat)}</span><time>${fmt(i.date)}</time></div><h4>${esc(i.title)}</h4></div>${imgOK(i)?"":doodle(i.cat)}</div>${picHTML(i)}<p>${esc(i.summary)}</p><div class="foot"><span>${esc(i.source)}</span>${i.ref?`<span class="flag">Update</span>`:lastUpd(i)?`<span class="flag">Updated ${fmt(lastUpd(i))}</span>`:m?`<span class="media">${m}</span>`:""}</div></button>`}
 function lastUpd(i){const u=i.updates||[];return u.length?u.map(x=>x.date).sort().pop():""}
 function drawList(){
  const s=q.value.trim().toLowerCase();
@@ -218,9 +226,10 @@ function drawTracking(){
 function sheetHTML(o){
  const u=safe(o.url),facts=(o.facts||[]).map(f=>`<div><b>${esc(f[1])}</b><span>${esc(f[0])}</span></div>`).join(""),body=(o.body&&o.body.length?o.body:[o.summary]).map(p=>`<p>${esc(p)}</p>`).join("");
  return `<div class="bar"><span>${esc(o.town)} · ${esc(o.cat)}</span><button type="button" class="x" id="shClose" aria-label="Close">×</button></div>
- <div class="art">${doodle(o.cat)}</div>
+ ${imgOK(o)||o.video?"":`<div class="art">${doodle(o.cat)}</div>`}
  <div class="meta"><time>${longDate(o.date)}</time><span>${esc(o.source)}</span>${ML[o.media]?`<span>${ML[o.media]}</span>`:""}</div>
  <h3 id="shTitle">${esc(o.title)}</h3>
+ ${picHTML(o,true)}${vidHTML(o)}
  ${facts?`<div class="facts">${facts}</div>`:""}
  <div class="body">${body}</div>
  ${(o.updates||[]).length?`<div class="upd"><h5>Updates</h5><ul>${[...o.updates].sort((a,b)=>b.date.localeCompare(a.date)).map(x=>{const xu=safe(x.url);return `<li><time>${fmt(x.date)}</time>${esc(x.text)} ${xu?`<a href="${esc(xu)}" target="_blank" rel="noopener">${esc(x.source)} ↗</a>`:esc(x.source||"")}</li>`}).join("")}</ul></div>`:""}

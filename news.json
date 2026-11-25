@@ -113,7 +113,6 @@
       "title": "“Del Campo al Mar” tasting dinner at Alma",
       "summary": "Chefs Vivoni Ventura and Brenda Gil Enseñat teamed up for a sunset tasting menu with cocktails at Alma Dynamic World Cuisine.",
       "source": "Metro / Sabrosía",
-      "media": "photo",
       "url": "https://www.metro.pr/sabrosia/2026/11/18/del-campo-al-mar-dos-chefs-unen-sus-talentos-en-una-experiencia-gastronomica-en-rincon/",
       "facts": [
         [
@@ -137,7 +136,12 @@
         "The dinner split the menu between land and sea: Ventura took the farm ingredients and Gil Enseñat the seafood, and they said every dish was a collaboration.",
         "Highlights included cacao-crusted lamb chops with mushroom chimichurri, bok choy and cassava, and river shrimp over pumpkin polenta with a spicy mango glaze. Each course came with a matched cocktail.",
         "Guests watched the sunset over the Tres Palmas Marine Reserve, and the evening included a traditional bomba performance. No date for another edition was announced."
-      ]
+      ],
+      "image": {
+        "src": "https://www.metro.pr/api/image/VW22X7AF6NHLND5DFSTPARLJB4.png?w=1200&h=630",
+        "credit": "Photo: supplied, via Metro / Sabrosía",
+        "alt": "Del Campo al Mar dinner at Alma, Rincón"
+      }
     },
     {
       "id": "rin-flood",
@@ -235,7 +239,12 @@
         "The Ports Authority's executive director said the new terminal contract is waiting on the Financial Oversight Board. It would add four jet bridges so passengers no longer walk across the tarmac in the rain.",
         "Overall, more than $450 million in work is planned, including a runway renovation and a new taxiway. A new control tower and security cameras are already done.",
         "He also said he expects new routes within two years, possibly including Germany, France and Italy. Airline negotiations run through the Puerto Rico Tourism Company."
-      ]
+      ],
+      "image": {
+        "src": "https://periodicovision.com/wp-content/uploads/2026/11/aeropuerto2-PORT.jpg",
+        "credit": "Photo: Semanario Visión",
+        "alt": "Rafael Hernández International Airport, Aguadilla"
+      }
     },
     {
       "id": "agl-flamas-death-1122",
@@ -464,7 +473,12 @@
       "body": [
         "Thursday, Friday and Sunday: kids' movies. Saturday: Noches de Artesanías with local artisans and live music. Thursday through Sunday: the kids' train around the town center plus three artificial-snow stations and photo spots.",
         "A free Thanksgiving lunch (600 plates) was served Nov 24. The season continues with a Fiesta de Reyes on Jan 6 and closes with the Fiestas de Pueblo, Jan 15–17. Announced by Mayor Kabir Solares García."
-      ]
+      ],
+      "image": {
+        "src": "https://bloximages.newyork1.vip.townnews.com/elvocero.com/content/tncms/assets/v3/editorial/d/d1/dd140eff-9bd0-438f-9773-323b56c561d5/6b01cb7c5d2cb.image.jpg?crop=1408%2C739%2C96%2C0&resize=1200%2C630&order=crop%2Cresize",
+        "credit": "Photo: supplied, via El Vocero",
+        "alt": "Christmas lighting in Añasco's plaza"
+      }
     },
     {
       "id": "may-wanted",
@@ -496,7 +510,12 @@
       "body": [
         "The Mayagüez Area Arrest Division picked him up in Cayey in a joint operation with the U.S. Marshals. The warrant stems from events on Dec 14, 2025, and covers illegal possession of a long gun or sawed-off shotgun and of ammunition.",
         "He couldn't post bail and was sent to a correctional facility until his preliminary hearing."
-      ]
+      ],
+      "image": {
+        "src": "https://www.elnuevodia.com/resizer/v2/BCLX33L6U5CPTKQ2ENFIZ363VI.png?auth=90bc6206f3828ca6cca24463b400470a1ca18c576e33780f9993428aa47c716d&quality=75&width=1200&height=717&focal=516%2C417",
+        "credit": "Photo: supplied, via El Nuevo Día",
+        "alt": "Jesús Alvarado Mercado after his arrest"
+      }
     },
     {
       "id": "may-gas",

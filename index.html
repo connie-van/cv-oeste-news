@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-build="8988c9e4">
+<html lang="en" data-build="1234f21f">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -113,8 +113,8 @@ footer{font-size:13px;opacity:.7;margin:28px 4px 0}
 html{overscroll-behavior-y:none}
 .ptr{position:fixed;left:50%;top:0;z-index:5;width:44px;height:44px;margin-left:-22px;border-radius:50%;background:#fff;border:1.5px solid #151515;box-shadow:0 2px 8px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;transform:translateY(-60px);opacity:0;pointer-events:none}
 .ptr svg{width:24px;height:24px}
-.ptr.go{transition:transform .32s cubic-bezier(.2,.9,.3,1),opacity .25s ease}
-.wrap{will-change:transform}.wrap.go{transition:transform .32s cubic-bezier(.2,.9,.3,1)}
+.ptr.anim{transition:transform .32s cubic-bezier(.2,.9,.3,1),opacity .25s ease}
+.wrap{will-change:transform}.wrap.anim{transition:transform .32s cubic-bezier(.2,.9,.3,1)}
 .ptr.spin svg{animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 #upd{cursor:pointer}
@@ -266,7 +266,7 @@ load();
 const ptr=$("ptr"),wrap=document.querySelector(".wrap"),TH=72,HOLD=64;let y0=null,pull=0,busy=false,armed=false;
 const hap=(()=>{let lb=null;try{lb=document.createElement("label");lb.setAttribute("aria-hidden","true");lb.style.cssText="position:fixed;left:-99px;top:0;opacity:0;pointer-events:none";const i=document.createElement("input");i.type="checkbox";i.setAttribute("switch","");lb.appendChild(i);document.body.appendChild(lb)}catch(e){}
  return()=>{try{if(navigator.vibrate)navigator.vibrate(12);else if(lb)lb.click()}catch(e){}}})();
-const setP=(d,anim)=>{for(const el of [ptr,wrap])el.classList.toggle("go",!!anim);
+const setP=(d,anim)=>{for(const el of [ptr,wrap])el.classList.toggle("anim",!!anim);
  wrap.style.transform=d?`translateY(${d}px)`:"";
  ptr.style.transform=`translateY(${Math.max(-50,d/2-22)}px) rotate(${d*4}deg)`;ptr.style.opacity=Math.min(1,d/TH)};
 async function refresh(){

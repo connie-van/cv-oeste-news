@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-25T01:29:00-04:00",
+  "updated": "2026-11-25T05:50:00-04:00",
   "tracking": [
     {
       "id": "flamas",
@@ -595,6 +595,39 @@
         "Prosecutors say that on Nov 2 he wrapped the body of the 33-year-old woman in a sheet and hid it in a wooded area behind his home in barrio Sábalos.",
         "He was identified in a lineup at the Mayagüez police headquarters. His preliminary hearing was set for Nov 17."
       ]
+    },
+    {
+      "id": "rin-rain-1124",
+      "town": "Rincón",
+      "date": "2026-11-24",
+      "cat": "Weather",
+      "title": "Afternoon storms and high tides, then drier for Thanksgiving",
+      "summary": "Rincón was on the National Weather Service's list of western towns with an elevated flood risk Tuesday as afternoon storms hit the west. Tides ran above normal, and drier air arrives Wednesday into Thanksgiving.",
+      "facts": [
+        [
+          "Rain chance",
+          "50%"
+        ],
+        [
+          "Tides",
+          "Above normal"
+        ],
+        [
+          "Surf",
+          "6+ ft breakers, Aguadilla to Fajardo"
+        ],
+        [
+          "Outlook",
+          "Drying Wed–Thu"
+        ]
+      ],
+      "body": [
+        "The National Weather Service expected isolated afternoon showers and thunderstorms over the interior, west and northwest, with locally heavy rain, lightning and gusty winds. Rincón, Aguada, Aguadilla, Añasco and Mayagüez were all listed with an elevated flood risk.",
+        "Tides were expected to run above normal, which can cause minor flooding in low-lying coastal spots around high tide. Rough surf with breakers over six feet and a higher rip-current risk covered the north coast from Aguadilla east.",
+        "Forecasters expect showers to taper off Wednesday and Thursday as drier, more stable air moves in."
+      ],
+      "source": "Metro PR",
+      "url": "https://www.metro.pr/noticias/2026/11/24/oleaje-elevara-el-riesgo-de-corrientes-marinas-en-playas-de-la-costa-norte"
     }
   ],
   "earth": [

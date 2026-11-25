@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-build="05fbc7fc">
+<html lang="en" data-build="c4fe307c">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -26,11 +26,11 @@
 body{margin:0;background:var(--bg);color:var(--soft);font:16px/1.5 "Instrument Sans",system-ui,sans-serif;overflow-x:clip}
 .wrap{max-width:720px;margin:0 auto;padding:12px max(4vw,12px) 48px}
 .serif{font-family:Newsreader,Georgia,serif;font-weight:400}
-.hero{background:var(--lime);color:var(--ink);border-radius:28px;padding:20px 22px 22px;display:grid;grid-template-columns:minmax(0,1fr) 132px;gap:8px;align-items:end}
-.hero .top{grid-column:1/-1;font-size:14px}
-.hero h1{font:400 44px/1 Newsreader,Georgia,serif;margin:18px 0 6px;letter-spacing:-.01em}
+.hero{background:var(--lime);color:var(--ink);border-radius:28px;padding:16px 20px 20px;display:block;align-items:end}
+.hero .top{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px}
+.hero h1{font:400 clamp(32px,9vw,40px)/1 Newsreader,Georgia,serif;margin:14px 0 6px;letter-spacing:-.01em;white-space:nowrap}
 .hero p{margin:0;font-size:14px}
-.hero svg{width:132px;height:150px}
+
 .stats-old{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--line);margin-top:14px;padding-top:12px}
 .stats b{display:block;font:400 30px/1 Newsreader,Georgia,serif}
 .stats span{font-size:12px}
@@ -67,6 +67,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
 .media{border:1.5px solid var(--ink);border-radius:99px;padding:1px 10px}
 .empty{color:var(--soft);opacity:.7;padding:20px 4px}
 .item{cursor:pointer;width:100%;text-align:left;border:0;font:inherit}
+.item .foot{gap:10px}.item .foot>span{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
 .cal{background:var(--card,light-dark(#fff,#1d1d1d));border:1.5px solid var(--soft);border-radius:24px;padding:14px 16px;margin:10px 0 4px}
 .cal[hidden]{display:none}
 .calhd{display:flex;justify-content:space-between;align-items:center}
@@ -141,7 +142,21 @@ footer{font-size:13px;opacity:.7;margin:28px 4px 0}
 .mread{margin-top:6px}
 .asp{margin:10px 0 0!important}.pill2{display:inline-block;font-size:11px;font-weight:600;border:1.5px solid #151515;border-radius:99px;padding:0 8px;margin-left:4px;vertical-align:2px}
 .plist div{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--line);font-size:16px}.rx{font-style:normal;font-weight:700;color:#c4320a}
-.hero .tile svg{width:30px;height:30px}.mread h5{font:400 22px Newsreader,Georgia,serif;margin:18px 0 4px;border-top:1px solid var(--line);padding-top:12px}.mread p{font-size:17px;line-height:1.55;margin:0}
+.moonchip{display:flex;align-items:center;gap:6px;background:none;border:0;padding:4px 0;min-height:32px;color:#151515;font:500 12px "Instrument Sans",sans-serif;cursor:pointer;text-align:right}
+.moonchip svg{width:18px;height:18px;flex:none}
+.wxcard{display:flex;align-items:center;gap:14px;background:var(--sky);border-radius:20px;padding:12px 16px;margin-top:14px;cursor:pointer;color:#151515}
+.wxcard svg{width:36px;height:36px;flex:none}
+.wxcard .tv{font:400 34px/1 Newsreader,Georgia,serif}
+.wxcard .wxt{font-size:13px;line-height:1.35;flex:1;min-width:0}
+.wxcard .wxt b{font-weight:600}
+.wxcard .chev{font-size:20px;opacity:.5}
+.fol{display:inline-flex;align-items:center;gap:5px;min-height:34px;padding:0 12px;border-radius:99px;border:1.5px solid #151515;background:transparent;color:#151515;font:600 13px "Instrument Sans",sans-serif;cursor:pointer;flex:none}
+.fol svg{width:13px;height:16px}
+.fol[aria-pressed=true]{background:#151515;color:#fff}
+.fol[aria-pressed=true] svg path{fill:#fff;stroke:#fff}
+.sheet .bar .acts{display:flex;align-items:center;gap:10px}
+.case .o .ohd{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.flist h2{margin-top:24px}.mread h5{font:400 22px Newsreader,Georgia,serif;margin:18px 0 4px;border-top:1px solid var(--line);padding-top:12px}.mread p{font-size:17px;line-height:1.55;margin:0}
 .pic{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:16px;margin:12px 0 0;background:rgba(21,21,21,.08)}
 .cred{font-size:12px;color:var(--mute);margin-top:4px}
 .sheet .pic{margin-top:18px;aspect-ratio:4/3}
@@ -156,21 +171,18 @@ html{overscroll-behavior-y:none}
 @keyframes spin{to{transform:rotate(360deg)}}
 #upd{cursor:pointer}
 @media (prefers-reduced-motion:no-preference){.sway{animation:sway 4s ease-in-out infinite alternate;transform-origin:66px 110px}@keyframes sway{from{transform:rotate(-1.5deg)}to{transform:rotate(1.5deg)}}}
-@media(max-width:400px){.hero{grid-template-columns:minmax(0,1fr) 96px}.hero svg{width:96px;height:110px}.hero h1{font-size:38px}}
+
 </style>
 </head>
 <body>
 <div class="ptr" id="ptr" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#151515" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v5h-5"/></svg></div>
 <div class="wrap">
 <section class="hero">
-  <div class="top"><span id="upd">Rincón &amp; nearby</span></div>
-  <div><h1>Oeste News</h1><p>News from Rincón and its neighbors: Aguada, Aguadilla, Añasco and Mayagüez.</p><p class="mini" id="mini"></p></div>
-  <svg viewBox="0 0 132 150" fill="none" stroke="#151515" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <circle cx="100" cy="30" r="14"/><path d="M100 8v-4M122 30h4M116 14l3-3M84 14l-3-3"/>
-    <g class="sway"><path d="M52 120 L58 50 H76 L82 120"/><path d="M54 40 H80 V50 H54Z"/><path d="M58 40 L67 30 L76 40"/><path d="M55 80 H79M54 98 H80"/><path d="M64 60 v10"/><path d="M30 34 l18 10M104 50 l-20 -4"/></g>
-    <path d="M6 126 c10 -8 20 8 30 0 s20 8 30 0 20 8 30 0 20 8 30 0"/><path d="M18 140 c10 -8 20 8 30 0 s20 8 30 0 20 8 30 0"/>
-  </svg>
-  <div class="tiles"><button type="button" class="tile" id="wxTile" aria-label="Weather in Rincón"></button><button type="button" class="tile" id="moonTile" aria-label="Moon phase and sign"></button></div>
+  <div class="top"><span id="upd">Rincón &amp; nearby</span><button type="button" class="moonchip" id="moonTile" aria-label="Moon phase and sign"></button></div>
+  <h1>Oeste News</h1>
+  <p>News from Rincón and its neighbors: Aguada, Aguadilla, Añasco and Mayagüez.</p>
+  <p class="mini" id="mini"></p>
+  <div class="wxcard" id="wxTile" role="button" tabindex="0" aria-label="Weather in Rincón"></div>
 </section>
 
 <section id="tracking"></section>
@@ -216,6 +228,14 @@ const imgOK=i=>i.image&&safe(i.image.src);
 const picHTML=(i,big)=>imgOK(i)?`<img class="pic" src="${esc(i.image.src)}" alt="${esc(i.image.alt||i.title)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.closest('[data-m]')&&this.closest('[data-m]').classList.add('noimg');this.nextElementSibling&&this.nextElementSibling.remove();this.remove()"><div class="cred">${esc(i.image.credit||"Photo: "+i.source)}</div>`:"";
 const vidHTML=i=>{const v=i.video;if(!v)return"";const id=String(v.id||"").replace(/[^\w-]/g,"");if(v.provider==="youtube"&&id)return `<div class="vid"><iframe src="https://www.youtube-nocookie.com/embed/${id}" title="${esc(v.title||i.title)}" allow="encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>${v.credit?`<div class="cred">${esc(v.credit)}</div>`:""}`;return""};
 const ML={photo:"Photo at source",photos:"Photos at source",video:"Video at source"};
+let FOL=new Set(["agl-flamas"]);try{const f=localStorage.getItem("oeste-follow");if(f)FOL=new Set(JSON.parse(f))}catch(e){}
+const saveFol=()=>{try{localStorage.setItem("oeste-follow",JSON.stringify([...FOL]))}catch(e){}};
+const RIB='<svg viewBox="0 0 13 16" aria-hidden="true"><path d="M1.5 1.5h10v13L6.5 11l-5 3.5Z" fill="none" stroke="#151515" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+const folBtn=id=>`<button type="button" class="fol" data-f="${esc(id)}" aria-pressed="${FOL.has(id)}">${RIB}<span>${FOL.has(id)?"Following":"Follow"}</span></button>`;
+const caseItem=c=>data.items.find(i=>i.case===c.id);
+const caseFollowed=c=>{const it=caseItem(c);return it?FOL.has(it.id):true};
+function updMini(){const d=data,nr=d.items.filter(i=>i.town==="Rincón").length,nf=d.items.filter(i=>FOL.has(i.id)).length;$("mini").textContent=`${d.items.length} stories · ${nr} from Rincón · following ${nf}`}
+function toggleFol(id){FOL.has(id)?FOL.delete(id):FOL.add(id);saveFol();updMini();drawTracking();drawList();document.querySelectorAll(`.fol[data-f="${CSS.escape(id)}"]`).forEach(b=>{b.setAttribute("aria-pressed",FOL.has(id));b.querySelector("span").textContent=FOL.has(id)?"Following":"Follow"})}
 let data={items:[],tracking:[]},town="All",day="",calOpen=false,mon=null;
 try{town=localStorage.getItem("oeste-town")||"All"}catch(e){}
 if(!TOWNS.includes(town))town="All";
@@ -225,7 +245,7 @@ const todayISO=()=>new Date().toLocaleDateString("en-CA",{timeZone:"America/Puer
 
 function drawChips(){chips.innerHTML=TOWNS.map(t=>`<button type="button" data-t="${esc(t)}" aria-pressed="${t===town}">${esc(t)}</button>`).join("")+`<button type="button" id="calBtn" aria-pressed="${calOpen||!!day}">Calendar</button>`}
 function card(i){const m=ML[i.media];
- return `<button type="button" class="item" data-s="${esc(i.id)}" style="background:${TC[i.town]||"var(--sky)"}"><div class="hd"><div><div class="meta"><b>${esc(i.town)}</b><span>${esc(i.cat)}</span><time>${fmt(i.date)}</time></div><h4>${esc(i.title)}</h4></div>${imgOK(i)?"":doodle(i.cat)}</div>${picHTML(i)}<p>${esc(i.summary)}</p><div class="foot"><span>${esc(i.source)}</span>${i.ref?`<span class="flag">Update</span>`:lastUpd(i)?`<span class="flag">Updated ${fmt(lastUpd(i))}</span>`:m?`<span class="media">${m}</span>`:""}</div></button>`}
+ return `<div class="item" role="button" tabindex="0" data-s="${esc(i.id)}" style="background:${TC[i.town]||"var(--sky)"}"><div class="hd"><div><div class="meta"><b>${esc(i.town)}</b><span>${esc(i.cat)}</span><time>${fmt(i.date)}</time></div><h4>${esc(i.title)}</h4></div>${imgOK(i)?"":doodle(i.cat)}</div>${picHTML(i)}<p>${esc(i.summary)}</p><div class="foot"><span>${esc(i.source)} ${i.ref?`<span class="flag">Update</span>`:lastUpd(i)?`<span class="flag">Updated ${fmt(lastUpd(i))}</span>`:m?`<span class="media">${m}</span>`:""}</span>${folBtn(i.ref||i.id)}</div></div>`}
 function lastUpd(i){const u=i.updates||[];return u.length?u.map(x=>x.date).sort().pop():""}
 function drawList(){
  const s=q.value.trim().toLowerCase();
@@ -251,13 +271,15 @@ function drawCal(){
  $("grid").innerHTML=h;
 }
 function drawTracking(){
- const el=$("tracking"),cs=data.tracking||[];
- el.innerHTML=cs.map(c=>{const tl=c.timeline||[],first=tl.length?tl[tl.length-1].date:"",days=first?Math.max(0,Math.round((Date.now()-new Date(first+"T12:00:00"))/864e5)):"–",reports=tl.filter(t=>safe(t.url)).length;
-  return `<h2>Following</h2><div class="case"><div class="o"><span class="pill">${esc(c.town)} · ${esc(c.place)}</span><h3>${esc(c.title)}</h3><p class="status">${esc(c.status)}</p><p>${esc(c.summary)}</p><div class="cstats"><div><b>${fmt(first)}</b><span>Incident</span></div><div><b>${days}</b><span>Days open</span></div><div><b>${reports}</b><span>Reports</span></div></div></div><div class="l"><ul class="tl">${tl.map((t,k)=>`<li data-t="${esc(c.id)}-${k}" tabindex="0" role="button"><time>${fmt(t.date)}</time>${esc(t.text)} <b>${esc(t.source)} →</b></li>`).join("")}</ul></div></div>`}).join("");
+ const el=$("tracking"),cs=(data.tracking||[]).filter(caseFollowed),caseIds=new Set((data.tracking||[]).map(c=>caseItem(c)&&caseItem(c).id));
+ const fs=data.items.filter(i=>FOL.has(i.id)&&!caseIds.has(i.id)).sort((a,b)=>b.date.localeCompare(a.date));
+ if(!cs.length&&!fs.length){el.innerHTML="";return}
+ el.innerHTML=`<h2>Following</h2>`+cs.map(c=>{const tl=c.timeline||[],first=tl.length?tl[tl.length-1].date:"",days=first?Math.max(0,Math.round((Date.now()-new Date(first+"T12:00:00"))/864e5)):"–",reports=tl.filter(t=>safe(t.url)).length;
+  return `<div class="case"><div class="o"><div class="ohd"><span class="pill">${esc(c.town)} · ${esc(c.place)}</span>${caseItem(c)?folBtn(caseItem(c).id):""}</div><h3>${esc(c.title)}</h3><p class="status">${esc(c.status)}</p><p>${esc(c.summary)}</p><div class="cstats"><div><b>${fmt(first)}</b><span>Incident</span></div><div><b>${days}</b><span>Days open</span></div><div><b>${reports}</b><span>Reports</span></div></div></div><div class="l"><ul class="tl">${tl.map((t,k)=>`<li data-t="${esc(c.id)}-${k}" tabindex="0" role="button"><time>${fmt(t.date)}</time>${esc(t.text)} <b>${esc(t.source)} →</b></li>`).join("")}</ul></div></div>`}).join("")+fs.map(card).join("");
 }
 function sheetHTML(o){
  const u=safe(o.url),facts=(o.facts||[]).map(f=>`<div><b>${esc(f[1])}</b><span>${esc(f[0])}</span></div>`).join(""),body=(o.body&&o.body.length?o.body:[o.summary]).map(p=>`<p>${esc(p)}</p>`).join("");
- return `<div class="bar"><span>${esc(o.town)} · ${esc(o.cat)}</span><button type="button" class="x" id="shClose" aria-label="Close">×</button></div>
+ return `<div class="bar"><span>${esc(o.town)} · ${esc(o.cat)}</span><span class="acts">${o.id?folBtn(o.ref||o.id):""}<button type="button" class="x" id="shClose" aria-label="Close">×</button></span></div>
  ${imgOK(o)||o.video?"":`<div class="art">${doodle(o.cat)}</div>`}
  <div class="meta"><time>${longDate(o.date)}</time><span>${esc(o.source)}</span>${ML[o.media]?`<span>${ML[o.media]}</span>`:""}</div>
  <h3 id="shTitle">${esc(o.title)}</h3>
@@ -288,8 +310,10 @@ $("grid").addEventListener("click",e=>{const b=e.target.closest("button[data-d]"
 $("prevM").addEventListener("click",()=>{mon=mon[1]?[mon[0],mon[1]-1]:[mon[0]-1,11];drawCal()});
 $("nextM").addEventListener("click",()=>{mon=mon[1]<11?[mon[0],mon[1]+1]:[mon[0]+1,0];drawCal()});
 $("dayClear").addEventListener("click",()=>{day="";drawChips();drawCal();drawList()});
-list.addEventListener("click",e=>{const b=e.target.closest("[data-s]");if(b)location.hash="s-"+b.dataset.s});
-$("tracking").addEventListener("click",e=>{const li=e.target.closest("[data-t]");if(li)location.hash="t-"+li.dataset.t});
+document.addEventListener("click",e=>{const f=e.target.closest(".fol");if(f){e.stopPropagation();toggleFol(f.dataset.f)}},true);
+list.addEventListener("click",e=>{if(e.target.closest(".fol"))return;const b=e.target.closest("[data-s]");if(b)location.hash="s-"+b.dataset.s});
+list.addEventListener("keydown",e=>{if(e.target.closest(".fol"))return;const b=e.target.closest("[data-s]");if(b&&(e.key==="Enter"||e.key===" ")){e.preventDefault();location.hash="s-"+b.dataset.s}});
+$("tracking").addEventListener("click",e=>{if(e.target.closest(".fol"))return;const li=e.target.closest("[data-t]");if(li){location.hash="t-"+li.dataset.t;return}const b=e.target.closest("[data-s]");if(b)location.hash="s-"+b.dataset.s});
 $("tracking").addEventListener("keydown",e=>{const li=e.target.closest("[data-t]");if(li&&(e.key==="Enter"||e.key===" ")){e.preventDefault();location.hash="t-"+li.dataset.t}});
 sheet.addEventListener("click",e=>{if(e.target.closest("#shClose"))closeSheet();else if(e.target.closest('a[href="#case"]')){e.preventDefault();sheet.hidden=true;document.body.style.overflow="";location.hash="case"}});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!sheet.hidden)closeSheet()});
@@ -372,10 +396,10 @@ const dirName=d=>["N","NE","E","SE","S","SW","W","NW"][Math.round(nrm(d)/45)%8];
 const ft=m=>m==null?"—":(m*3.281).toFixed(1)+" ft";
 function drawSky(){
  const mn=moonNow(),wt=$("wxTile"),mt=$("moonTile");
- mt.innerHTML=`<span class="thd"><span class="tl2">Moon</span>${moonSVG(mn.e,30)}</span><b class="tv">${esc(mn.phase.n)}</b><span class="sm">in ${mn.sign}${mn.name?" · "+esc(mn.name):""}</span>`;
+ mt.innerHTML=`${moonSVG(mn.e,18)}<span>${esc(mn.phase.n)} in ${mn.sign}</span>`;
  if(W&&W.current){const c=W.current,d=W.daily,[t,k]=wx(c.weather_code);
-  wt.innerHTML=`<span class="thd"><span class="tl2">Rincón</span>${wIcon(k,c.is_day,30)}</span><b class="tv">${Math.round(c.temperature_2m)}°</b><span class="sm">${t}<br>H:${Math.round(d.temperature_2m_max[0])}° L:${Math.round(d.temperature_2m_min[0])}°</span>`;
- }else wt.innerHTML=`<span class="thd"><span class="tl2">Rincón</span>${wIcon("pcloud",1,30)}</span><b class="tv">${wErr?"—":"…"}</b><span class="sm">${wErr?"Weather unavailable":"Loading weather"}</span>`;
+  wt.innerHTML=`${wIcon(k,c.is_day,36)}<b class="tv">${Math.round(c.temperature_2m)}°</b><span class="wxt"><b>Rincón</b> · ${t}<br>H:${Math.round(d.temperature_2m_max[0])}° L:${Math.round(d.temperature_2m_min[0])}°</span><span class="chev">›</span>`;
+ }else wt.innerHTML=`${wIcon("pcloud",1,36)}<b class="tv">${wErr?"—":"…"}</b><span class="wxt"><b>Rincón</b><br>${wErr?"Weather unavailable":"Loading weather"}</span>`;
 }
 function weatherHTML(){
  if(!W||!W.current)return `<div class="bar"><span>Weather</span><button type="button" class="x" id="shClose" aria-label="Close">×</button></div><p class="body" style="margin-top:40px">${wErr?"Couldn't load the weather right now. Pull down on the main screen to try again.":"Loading…"}</p>`;
@@ -478,12 +502,13 @@ function moonHTML(){
 }
 function openPanel(html,bg){sheet.style.background=bg;shIn.innerHTML=html;sheet.hidden=false;document.body.style.overflow="hidden";sheet.scrollTop=0;$("shClose")&&$("shClose").focus()}
 $("wxTile").addEventListener("click",()=>{location.hash="weather"});
+$("wxTile").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();location.hash="weather"}});
 $("moonTile").addEventListener("click",()=>{location.hash="moon"});
 drawSky();loadWeather();setInterval(drawSky,6e5);
 
 function load(){return fetch("news.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.json()).then(d=>{
  data=d;
- {const nr=d.items.filter(i=>i.town==="Rincón").length,nc=(d.tracking||[]).length;$("mini").textContent=`${d.items.length} stories · ${nr} from Rincón · following ${nc} case${nc===1?"":"s"}`}
+ updMini();
  const u=new Date(d.updated);
  if(!isNaN(u))$("upd").textContent="Updated "+u.toLocaleString("en-US",{month:"short",day:"numeric",hour:"numeric",minute:"2-digit",timeZone:"America/Puerto_Rico"});
  drawTracking();drawList();drawCal();route();

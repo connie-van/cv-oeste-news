@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-build="c60ae612">
+<html lang="en" data-build="7bdc332b">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -160,7 +160,10 @@ footer{font-size:13px;opacity:.7;margin:28px 4px 0}
 .plist div{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--line);font-size:16px}.rx{font-style:normal;font-weight:700;color:#c4320a}
 .moonchip{display:flex;align-items:center;gap:6px;background:none;border:0;padding:4px 0;min-height:32px;color:#151515;font:500 12px "Instrument Sans",sans-serif;cursor:pointer;text-align:right}
 .moonchip svg{width:18px;height:18px;flex:none}
-.wxcard{display:flex;align-items:center;gap:12px;background:var(--sky);border-radius:20px;padding:12px 16px;margin-top:14px;cursor:pointer;color:#151515}
+.wxcard{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,1.2fr);align-items:center;border-top:1px solid var(--line);margin-top:14px;padding-top:12px;cursor:pointer;color:#151515}
+.wc{padding:0 12px;border-left:1px solid var(--line);min-height:52px;display:flex;flex-direction:column;justify-content:center}
+.wc1{padding-left:0;border-left:0}.wc1 b{font:400 34px/1 Newsreader,Georgia,serif;white-space:nowrap}.wc1 span,.wc2 span,.wc3 span{font-size:12px;line-height:1.35}
+.wc2{gap:4px}.wc3 span{display:block}
 .wxcard svg{width:26px;height:26px;flex:none}
 .wxcard .wl{display:block;font-size:12px;font-weight:600;opacity:.7;margin-bottom:2px}
 .wxcard .wline{display:block;font-size:15px;line-height:1.45}.wxcard .wline i{font-style:normal;opacity:.4;padding:0 2px}
@@ -423,8 +426,8 @@ function drawSky(){
  mt.innerHTML=`${moonSVG(mn.e,18)}<span>${esc(mn.phase.n)} in ${mn.sign}</span>`;
  if(W&&W.current){const c=W.current,d=W.daily,[t,k]=wx(c.weather_code);
   const aq=AQ&&AQ.us_aqi!=null?Math.round(AQ.us_aqi):null;
-  wt.innerHTML=`${wIcon(k,c.is_day,26)}<span class="wxt"><span class="wl">Rincón weather</span><span class="wline">${Math.round(c.temperature_2m)}°F <i>|</i> ${t} <i>|</i> Humidity ${Math.round(c.relative_humidity_2m)}% <i>|</i> Rain ${d.precipitation_probability_max[0]??0}%${aq!=null?` <i>|</i> AQI ${aq} ${aqiCat(aq)}`:""}</span></span><span class="chev">›</span>`;
- }else wt.innerHTML=`${wIcon("pcloud",1,26)}<span class="wxt"><span class="wl">Rincón weather</span><span class="wline">${wErr?"Weather unavailable":"Loading…"}</span></span>`;
+  wt.innerHTML=`<div class="wc wc1"><b>${Math.round(c.temperature_2m)}°F</b><span>Rincón</span></div><div class="wc wc2">${wIcon(k,c.is_day,26)}<span>${t}</span></div><div class="wc wc3"><span>Humidity ${Math.round(c.relative_humidity_2m)}%</span><span>Rain ${d.precipitation_probability_max[0]??0}%</span>${aq!=null?`<span>AQI ${aq} ${aqiCat(aq)}</span>`:""}</div>`;
+ }else wt.innerHTML=`<div class="wc wc1"><b>—</b><span>Rincón</span></div><div class="wc wc2">${wIcon("pcloud",1,26)}<span>${wErr?"Weather unavailable":"Loading…"}</span></div><div class="wc wc3"></div>`;
 }
 function weatherHTML(){
  if(!W||!W.current)return `<div class="bar"><span>Weather</span><button type="button" class="x" id="shClose" aria-label="Close">×</button></div><p class="body" style="margin-top:40px">${wErr?"Couldn't load the weather right now. Pull down on the main screen to try again.":"Loading…"}</p>`;

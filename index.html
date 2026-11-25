@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-build="9db0a8b7">
+<html lang="en" data-build="c60ae612">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -68,12 +68,12 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
 .empty{color:var(--soft);opacity:.7;padding:20px 4px}
 .item{cursor:pointer;width:100%;text-align:left;border:0;font:inherit}
 .item{position:relative;overflow:hidden}
-.case .o{position:relative;--c:var(--orange)}
+.case .o{position:relative;--c:var(--orange);--cd:#d8400a}
 .ear{position:absolute;top:0;right:0;width:52px;height:52px;border:0;background:transparent;padding:0;margin:0;cursor:pointer;z-index:2;-webkit-tap-highlight-color:transparent}
 .ear svg{position:absolute;top:0;right:0;width:40px;height:40px;overflow:visible;transform:scale(0);transform-origin:100% 0;transition:transform .2s cubic-bezier(.2,.9,.3,1.2)}
 .ear[aria-pressed=true] svg{transform:scale(1)}
 .ear .cut{fill:var(--bg)}
-.ear .flap{fill:color-mix(in srgb,var(--c,#ccc) 72%,#151515);stroke:#151515;stroke-width:1.6;stroke-linejoin:round;filter:drop-shadow(-2px 3px 2px rgba(0,0,0,.18))}
+.ear .flap{fill:var(--cd,#999);stroke:#151515;stroke-width:.9;stroke-linejoin:round;filter:drop-shadow(-2px 3px 2px rgba(0,0,0,.18))}
 .item:has(>.ear[aria-pressed=true]),.case:has(.ear[aria-pressed=true]){border-top-right-radius:0}
 .ear:focus-visible{outline:3px solid var(--orange);outline-offset:-6px}
 .item .hd>svg{margin-top:12px}
@@ -225,6 +225,7 @@ html{overscroll-behavior-y:none}
 {
 const BUILD=document.documentElement.dataset.build;
 const TOWNS=["All","Rincón","Aguada","Aguadilla","Añasco","Mayagüez"];
+const TCD={"Rincón":"#b3dd52","Aguada":"#ee968c","Aguadilla":"#86aef7","Añasco":"#e3c64e","Mayagüez":"#bb93ea"};
 const TC={"Rincón":"var(--lime)","Aguada":"var(--pink)","Aguadilla":"var(--sky)","Añasco":"var(--butter)","Mayagüez":"var(--lilac)"};
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const safe=u=>/^https:\/\//.test(u||"")?u:"";
@@ -265,7 +266,7 @@ const todayISO=()=>new Date().toLocaleDateString("en-CA",{timeZone:"America/Puer
 
 function drawChips(){chips.innerHTML=TOWNS.map(t=>`<button type="button" data-t="${esc(t)}" aria-pressed="${t===town}">${esc(t)}</button>`).join("")+`<button type="button" id="calBtn" aria-pressed="${calOpen||!!day}">Calendar</button>`}
 function card(i){const m=ML[i.media];
- return `<div class="item" role="button" tabindex="0" data-s="${esc(i.id)}" style="--c:${TC[i.town]||"var(--sky)"};background:var(--c)">${folBtn(i.ref||i.id)}<div class="hd"><div><div class="meta"><b>${esc(i.town)}</b><span>${esc(i.cat)}</span><time>${fmt(i.date)}</time></div><h4>${esc(i.title)}</h4></div>${imgOK(i)?"":doodle(i.cat)}</div>${picHTML(i)}<p>${esc(i.summary)}</p><div class="foot"><span>${esc(i.source)} ${i.ref?`<span class="flag">Update</span>`:lastUpd(i)?`<span class="flag">Updated ${fmt(lastUpd(i))}</span>`:m?`<span class="media">${m}</span>`:""}</span></div></div>`}
+ return `<div class="item" role="button" tabindex="0" data-s="${esc(i.id)}" style="--c:${TC[i.town]||"var(--sky)"};--cd:${TCD[i.town]||"#86aef7"};background:var(--c)">${folBtn(i.ref||i.id)}<div class="hd"><div><div class="meta"><b>${esc(i.town)}</b><span>${esc(i.cat)}</span><time>${fmt(i.date)}</time></div><h4>${esc(i.title)}</h4></div>${imgOK(i)?"":doodle(i.cat)}</div>${picHTML(i)}<p>${esc(i.summary)}</p><div class="foot"><span>${esc(i.source)} ${i.ref?`<span class="flag">Update</span>`:lastUpd(i)?`<span class="flag">Updated ${fmt(lastUpd(i))}</span>`:m?`<span class="media">${m}</span>`:""}</span></div></div>`}
 function lastUpd(i){const u=i.updates||[];return u.length?u.map(x=>x.date).sort().pop():""}
 function drawList(){
  const s=q.value.trim().toLowerCase();

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-build="2c284ee4">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -110,11 +110,19 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
 .orig{display:flex;justify-content:center;align-items:center;width:100%;min-height:52px;margin-top:12px;border-radius:99px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);font:600 16px "Instrument Sans",sans-serif;text-decoration:none}
 @media (prefers-reduced-motion:no-preference){.sheet:not([hidden]) .in{animation:up .28s ease-out}@keyframes up{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}}
 footer{font-size:13px;opacity:.7;margin:28px 4px 0}
+html{overscroll-behavior-y:none}
+.ptr{position:fixed;left:50%;top:0;z-index:5;width:44px;height:44px;margin-left:-22px;border-radius:50%;background:#fff;border:1.5px solid #151515;box-shadow:0 2px 8px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;transform:translateY(-60px);opacity:0;pointer-events:none}
+.ptr svg{width:24px;height:24px}
+.ptr.go{transition:transform .25s ease,opacity .25s ease}
+.ptr.spin svg{animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#upd{cursor:pointer}
 @media (prefers-reduced-motion:no-preference){.sway{animation:sway 4s ease-in-out infinite alternate;transform-origin:66px 110px}@keyframes sway{from{transform:rotate(-1.5deg)}to{transform:rotate(1.5deg)}}}
 @media(max-width:400px){.hero{grid-template-columns:minmax(0,1fr) 96px}.hero svg{width:96px;height:110px}.hero h1{font-size:38px}}
 </style>
 </head>
 <body>
+<div class="ptr" id="ptr" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#151515" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v5h-5"/></svg></div>
 <div class="wrap">
 <section class="hero">
   <div class="top"><span id="upd">Rincón &amp; nearby</span></div>
@@ -146,6 +154,7 @@ footer{font-size:13px;opacity:.7;margin:28px 4px 0}
 <div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="shTitle"><div class="in" id="shIn"></div></div>
 <script>
 {
+const BUILD=document.documentElement.dataset.build;
 const TOWNS=["All","Rincón","Aguada","Aguadilla","Añasco","Mayagüez"];
 const TC={"Rincón":"var(--lime)","Aguada":"var(--pink)","Aguadilla":"var(--sky)","Añasco":"var(--butter)","Mayagüez":"var(--lilac)"};
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -243,7 +252,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!sheet.hidden)close
 window.addEventListener("hashchange",route);
 q.addEventListener("input",drawList);
 drawChips();
-fetch("news.json?t="+Date.now()).then(r=>r.json()).then(d=>{
+function load(){return fetch("news.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.json()).then(d=>{
  data=d;
  $("sAll").textContent=d.items.length;
  $("sRin").textContent=d.items.filter(i=>i.town==="Rincón").length;
@@ -251,7 +260,23 @@ fetch("news.json?t="+Date.now()).then(r=>r.json()).then(d=>{
  const u=new Date(d.updated);
  if(!isNaN(u))$("upd").textContent="Updated "+u.toLocaleString("en-US",{month:"short",day:"numeric",hour:"numeric",minute:"2-digit",timeZone:"America/Puerto_Rico"});
  drawTracking();drawList();drawCal();route();
-}).catch(()=>{list.innerHTML=`<p class="empty">Couldn't load the news right now. Pull down to refresh.</p>`});
+}).catch(()=>{list.innerHTML=`<p class="empty">Couldn't load the news right now. Pull down to refresh.</p>`})}
+load();
+const ptr=$("ptr"),TH=70;let y0=null,pull=0,busy=false;
+const setP=(d,a)=>{ptr.classList.toggle("go",!!a);ptr.style.transform=`translateY(${Math.min(d,TH+20)-50}px) rotate(${d*3}deg)`;ptr.style.opacity=Math.min(1,d/TH)};
+async function refresh(){
+ busy=true;ptr.classList.add("spin");setP(TH,true);
+ let pageChanged=false;
+ try{const r=await fetch(location.pathname+"?v="+Date.now(),{cache:"no-store"});const t=await r.text();
+  pageChanged=r.ok&&t.includes('data-build="')&&!t.includes('data-build="'+BUILD+'"');}catch(e){}
+ if(pageChanged){try{await fetch(location.pathname,{cache:"reload"})}catch(e){}location.reload();return}
+ await load();
+ ptr.classList.remove("spin");setP(0,true);busy=false;
+}
+window.addEventListener("touchstart",e=>{if(busy||!sheet.hidden||window.scrollY>0){y0=null;return}y0=e.touches[0].clientY;pull=0},{passive:true});
+window.addEventListener("touchmove",e=>{if(y0===null)return;pull=Math.max(0,(e.touches[0].clientY-y0)*.55);if(pull>0&&window.scrollY<=0){setP(pull,false)}},{passive:true});
+window.addEventListener("touchend",()=>{if(y0===null)return;y0=null;if(pull>=TH)refresh();else setP(0,true);pull=0});
+$("upd").addEventListener("click",()=>{if(!busy)refresh()});
 }
 </script>
 </body>

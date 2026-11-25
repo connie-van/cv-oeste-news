@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-build="2c284ee4">
+<html lang="en" data-build="8988c9e4">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -113,7 +113,8 @@ footer{font-size:13px;opacity:.7;margin:28px 4px 0}
 html{overscroll-behavior-y:none}
 .ptr{position:fixed;left:50%;top:0;z-index:5;width:44px;height:44px;margin-left:-22px;border-radius:50%;background:#fff;border:1.5px solid #151515;box-shadow:0 2px 8px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;transform:translateY(-60px);opacity:0;pointer-events:none}
 .ptr svg{width:24px;height:24px}
-.ptr.go{transition:transform .25s ease,opacity .25s ease}
+.ptr.go{transition:transform .32s cubic-bezier(.2,.9,.3,1),opacity .25s ease}
+.wrap{will-change:transform}.wrap.go{transition:transform .32s cubic-bezier(.2,.9,.3,1)}
 .ptr.spin svg{animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 #upd{cursor:pointer}
@@ -262,20 +263,28 @@ function load(){return fetch("news.json?t="+Date.now(),{cache:"no-store"}).then(
  drawTracking();drawList();drawCal();route();
 }).catch(()=>{list.innerHTML=`<p class="empty">Couldn't load the news right now. Pull down to refresh.</p>`})}
 load();
-const ptr=$("ptr"),TH=70;let y0=null,pull=0,busy=false;
-const setP=(d,a)=>{ptr.classList.toggle("go",!!a);ptr.style.transform=`translateY(${Math.min(d,TH+20)-50}px) rotate(${d*3}deg)`;ptr.style.opacity=Math.min(1,d/TH)};
+const ptr=$("ptr"),wrap=document.querySelector(".wrap"),TH=72,HOLD=64;let y0=null,pull=0,busy=false,armed=false;
+const hap=(()=>{let lb=null;try{lb=document.createElement("label");lb.setAttribute("aria-hidden","true");lb.style.cssText="position:fixed;left:-99px;top:0;opacity:0;pointer-events:none";const i=document.createElement("input");i.type="checkbox";i.setAttribute("switch","");lb.appendChild(i);document.body.appendChild(lb)}catch(e){}
+ return()=>{try{if(navigator.vibrate)navigator.vibrate(12);else if(lb)lb.click()}catch(e){}}})();
+const setP=(d,anim)=>{for(const el of [ptr,wrap])el.classList.toggle("go",!!anim);
+ wrap.style.transform=d?`translateY(${d}px)`:"";
+ ptr.style.transform=`translateY(${Math.max(-50,d/2-22)}px) rotate(${d*4}deg)`;ptr.style.opacity=Math.min(1,d/TH)};
 async function refresh(){
- busy=true;ptr.classList.add("spin");setP(TH,true);
- let pageChanged=false;
+ busy=true;ptr.classList.add("spin");setP(HOLD,true);
+ const t0=Date.now();let pageChanged=false;
  try{const r=await fetch(location.pathname+"?v="+Date.now(),{cache:"no-store"});const t=await r.text();
   pageChanged=r.ok&&t.includes('data-build="')&&!t.includes('data-build="'+BUILD+'"');}catch(e){}
  if(pageChanged){try{await fetch(location.pathname,{cache:"reload"})}catch(e){}location.reload();return}
  await load();
+ await new Promise(r=>setTimeout(r,Math.max(0,600-(Date.now()-t0))));
  ptr.classList.remove("spin");setP(0,true);busy=false;
 }
-window.addEventListener("touchstart",e=>{if(busy||!sheet.hidden||window.scrollY>0){y0=null;return}y0=e.touches[0].clientY;pull=0},{passive:true});
-window.addEventListener("touchmove",e=>{if(y0===null)return;pull=Math.max(0,(e.touches[0].clientY-y0)*.55);if(pull>0&&window.scrollY<=0){setP(pull,false)}},{passive:true});
-window.addEventListener("touchend",()=>{if(y0===null)return;y0=null;if(pull>=TH)refresh();else setP(0,true);pull=0});
+const damp=d=>d<=0?0:160*(1-Math.exp(-d/260));
+window.addEventListener("touchstart",e=>{if(busy||!sheet.hidden||window.scrollY>0||e.touches.length>1){y0=null;return}y0=e.touches[0].clientY;pull=0;armed=false},{passive:true});
+window.addEventListener("touchmove",e=>{if(y0===null)return;const d=e.touches[0].clientY-y0;if(window.scrollY>0||d<0){if(pull)setP(0,true);pull=0;return}
+ pull=damp(d);if(e.cancelable)e.preventDefault();setP(pull,false);
+ if(pull>=TH&&!armed){armed=true;hap()}else if(pull<TH&&armed)armed=false},{passive:false});
+window.addEventListener("touchend",()=>{if(y0===null)return;y0=null;if(pull>=TH)refresh();else setP(0,true);pull=0;armed=false});
 $("upd").addEventListener("click",()=>{if(!busy)refresh()});
 }
 </script>

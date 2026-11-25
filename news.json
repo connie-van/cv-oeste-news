@@ -596,5 +596,33 @@
         "He was identified in a lineup at the Mayagüez police headquarters. His preliminary hearing was set for Nov 17."
       ]
     }
+  ],
+  "earth": [
+    {
+      "id": "enso-1112",
+      "date": "2026-11-12",
+      "cat": "Climate",
+      "title": "El Niño keeps strengthening toward a historic event",
+      "summary": "NOAA says a strong-to-very-strong El Niño is likely through January–March 2027, possibly one of the strongest on record since 1950.",
+      "body": [
+        "In its Nov 12 update, NOAA's Climate Prediction Center kept its El Niño Advisory in place and said the event is still strengthening, with a strong-to-very-strong El Niño likely through January–March 2027.",
+        "Sea-surface temperatures in the key Niño 3.4 region were about 2.5°C above normal, and about 4.4°C above normal off South America. NOAA's next update is Dec 10."
+      ],
+      "source": "NOAA Climate Prediction Center",
+      "url": "https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/enso_advisory/ensodisc.shtml"
+    },
+    {
+      "id": "quake-mona-1121",
+      "date": "2026-11-21",
+      "cat": "Seismic",
+      "title": "M4.4 quake near Mona Island felt in Puerto Rico",
+      "summary": "A deep quake about 65 miles northwest of Mona Island was felt across Puerto Rico. No tsunami warning, advisory or watch was issued.",
+      "body": [
+        "The quake struck Saturday morning about 65 miles northwest of Mona Island at a depth of roughly 106 km, between eastern Dominican Republic and Puerto Rico's west coast.",
+        "Some reports describe two back-to-back quakes in the 4.6–4.7 range in the same area. Officials said there was no tsunami threat for Puerto Rico or the Virgin Islands."
+      ],
+      "source": "El Nuevo Día",
+      "url": "https://www.elnuevodia.com/noticias/locales/notas/registran-temblor-de-magnitud-44-al-sureste-de-republica-dominicana/"
+    }
   ]
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-build="c4fe307c">
+<html lang="en" data-build="bf15e97d">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -67,6 +67,19 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
 .media{border:1.5px solid var(--ink);border-radius:99px;padding:1px 10px}
 .empty{color:var(--soft);opacity:.7;padding:20px 4px}
 .item{cursor:pointer;width:100%;text-align:left;border:0;font:inherit}
+.item{position:relative;overflow:hidden}
+.case .o{position:relative}
+.ear{position:absolute;top:0;right:0;width:52px;height:52px;border:0;background:transparent;padding:0;margin:0;cursor:pointer;z-index:2;-webkit-tap-highlight-color:transparent}
+.ear::after{content:"";position:absolute;top:0;right:0;width:0;height:0;background:linear-gradient(225deg,var(--bg) 50%,#151515 50%);border-bottom-left-radius:7px;box-shadow:-2px 3px 5px rgba(0,0,0,.18);transition:width .18s ease,height .18s ease}
+.ear[aria-pressed=true]::after{width:36px;height:36px}
+.ear:focus-visible{outline:3px solid var(--orange);outline-offset:-6px}
+.item .hd>svg{margin-top:12px}
+.earthc{background:#cfeee8}
+.elines{margin:10px 0 0;padding:0 0 0 18px;font-size:15px;line-height:1.45}.elines li{margin:4px 0}
+.enote{border-top:1px solid var(--line);padding:10px 0}.enote summary{list-style:none;cursor:pointer}.enote summary::-webkit-details-marker{display:none}
+.enote .et{display:block;font:400 21px/1.2 Newsreader,Georgia,serif;margin:4px 0}.enote .es{display:block;font-size:15px}.enote p{font-size:16px;line-height:1.55;margin:10px 0 0}
+.enote[open] summary .es{display:none}.mread a{color:#151515;font-weight:600}
+.srcl{display:inline-block;margin-top:10px;color:#151515;font-weight:600}
 .item .foot{gap:10px}.item .foot>span{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
 .cal{background:var(--card,light-dark(#fff,#1d1d1d));border:1.5px solid var(--soft);border-radius:24px;padding:14px 16px;margin:10px 0 4px}
 .cal[hidden]{display:none}
@@ -144,13 +157,15 @@ footer{font-size:13px;opacity:.7;margin:28px 4px 0}
 .plist div{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--line);font-size:16px}.rx{font-style:normal;font-weight:700;color:#c4320a}
 .moonchip{display:flex;align-items:center;gap:6px;background:none;border:0;padding:4px 0;min-height:32px;color:#151515;font:500 12px "Instrument Sans",sans-serif;cursor:pointer;text-align:right}
 .moonchip svg{width:18px;height:18px;flex:none}
-.wxcard{display:flex;align-items:center;gap:14px;background:var(--sky);border-radius:20px;padding:12px 16px;margin-top:14px;cursor:pointer;color:#151515}
-.wxcard svg{width:36px;height:36px;flex:none}
+.wxcard{display:flex;align-items:center;gap:12px;background:var(--sky);border-radius:20px;padding:12px 16px;margin-top:14px;cursor:pointer;color:#151515}
+.wxcard svg{width:26px;height:26px;flex:none}
+.wxcard .wl{display:block;font-size:12px;font-weight:600;opacity:.7;margin-bottom:2px}
+.wxcard .wline{display:block;font-size:15px;line-height:1.45}.wxcard .wline i{font-style:normal;opacity:.4;padding:0 2px}
 .wxcard .tv{font:400 34px/1 Newsreader,Georgia,serif}
 .wxcard .wxt{font-size:13px;line-height:1.35;flex:1;min-width:0}
 .wxcard .wxt b{font-weight:600}
 .wxcard .chev{font-size:20px;opacity:.5}
-.fol{display:inline-flex;align-items:center;gap:5px;min-height:34px;padding:0 12px;border-radius:99px;border:1.5px solid #151515;background:transparent;color:#151515;font:600 13px "Instrument Sans",sans-serif;cursor:pointer;flex:none}
+.fol-old{display:inline-flex;align-items:center;gap:5px;min-height:34px;padding:0 12px;border-radius:99px;border:1.5px solid #151515;background:transparent;color:#151515;font:600 13px "Instrument Sans",sans-serif;cursor:pointer;flex:none}
 .fol svg{width:13px;height:16px}
 .fol[aria-pressed=true]{background:#151515;color:#fff}
 .fol[aria-pressed=true] svg path{fill:#fff;stroke:#fff}
@@ -187,6 +202,7 @@ html{overscroll-behavior-y:none}
 
 <section id="tracking"></section>
 
+<section id="earth"></section>
 <h2>Local news</h2>
 <div class="tools">
   <input class="search" id="q" type="search" placeholder="Search headlines" aria-label="Search headlines">
@@ -231,11 +247,11 @@ const ML={photo:"Photo at source",photos:"Photos at source",video:"Video at sour
 let FOL=new Set(["agl-flamas"]);try{const f=localStorage.getItem("oeste-follow");if(f)FOL=new Set(JSON.parse(f))}catch(e){}
 const saveFol=()=>{try{localStorage.setItem("oeste-follow",JSON.stringify([...FOL]))}catch(e){}};
 const RIB='<svg viewBox="0 0 13 16" aria-hidden="true"><path d="M1.5 1.5h10v13L6.5 11l-5 3.5Z" fill="none" stroke="#151515" stroke-width="1.6" stroke-linejoin="round"/></svg>';
-const folBtn=id=>`<button type="button" class="fol" data-f="${esc(id)}" aria-pressed="${FOL.has(id)}">${RIB}<span>${FOL.has(id)?"Following":"Follow"}</span></button>`;
+const folBtn=id=>`<button type="button" class="ear" data-f="${esc(id)}" aria-pressed="${FOL.has(id)}" aria-label="${FOL.has(id)?"Unfollow":"Follow"} story"></button>`;
 const caseItem=c=>data.items.find(i=>i.case===c.id);
 const caseFollowed=c=>{const it=caseItem(c);return it?FOL.has(it.id):true};
 function updMini(){const d=data,nr=d.items.filter(i=>i.town==="Rincón").length,nf=d.items.filter(i=>FOL.has(i.id)).length;$("mini").textContent=`${d.items.length} stories · ${nr} from Rincón · following ${nf}`}
-function toggleFol(id){FOL.has(id)?FOL.delete(id):FOL.add(id);saveFol();updMini();drawTracking();drawList();document.querySelectorAll(`.fol[data-f="${CSS.escape(id)}"]`).forEach(b=>{b.setAttribute("aria-pressed",FOL.has(id));b.querySelector("span").textContent=FOL.has(id)?"Following":"Follow"})}
+function toggleFol(id){FOL.has(id)?FOL.delete(id):FOL.add(id);saveFol();updMini();drawTracking();drawList();document.querySelectorAll(`.ear[data-f="${CSS.escape(id)}"]`).forEach(b=>{b.setAttribute("aria-pressed",FOL.has(id));b.setAttribute("aria-label",(FOL.has(id)?"Unfollow":"Follow")+" story")});try{hap()}catch(e){}}
 let data={items:[],tracking:[]},town="All",day="",calOpen=false,mon=null;
 try{town=localStorage.getItem("oeste-town")||"All"}catch(e){}
 if(!TOWNS.includes(town))town="All";
@@ -245,7 +261,7 @@ const todayISO=()=>new Date().toLocaleDateString("en-CA",{timeZone:"America/Puer
 
 function drawChips(){chips.innerHTML=TOWNS.map(t=>`<button type="button" data-t="${esc(t)}" aria-pressed="${t===town}">${esc(t)}</button>`).join("")+`<button type="button" id="calBtn" aria-pressed="${calOpen||!!day}">Calendar</button>`}
 function card(i){const m=ML[i.media];
- return `<div class="item" role="button" tabindex="0" data-s="${esc(i.id)}" style="background:${TC[i.town]||"var(--sky)"}"><div class="hd"><div><div class="meta"><b>${esc(i.town)}</b><span>${esc(i.cat)}</span><time>${fmt(i.date)}</time></div><h4>${esc(i.title)}</h4></div>${imgOK(i)?"":doodle(i.cat)}</div>${picHTML(i)}<p>${esc(i.summary)}</p><div class="foot"><span>${esc(i.source)} ${i.ref?`<span class="flag">Update</span>`:lastUpd(i)?`<span class="flag">Updated ${fmt(lastUpd(i))}</span>`:m?`<span class="media">${m}</span>`:""}</span>${folBtn(i.ref||i.id)}</div></div>`}
+ return `<div class="item" role="button" tabindex="0" data-s="${esc(i.id)}" style="background:${TC[i.town]||"var(--sky)"}">${folBtn(i.ref||i.id)}<div class="hd"><div><div class="meta"><b>${esc(i.town)}</b><span>${esc(i.cat)}</span><time>${fmt(i.date)}</time></div><h4>${esc(i.title)}</h4></div>${imgOK(i)?"":doodle(i.cat)}</div>${picHTML(i)}<p>${esc(i.summary)}</p><div class="foot"><span>${esc(i.source)} ${i.ref?`<span class="flag">Update</span>`:lastUpd(i)?`<span class="flag">Updated ${fmt(lastUpd(i))}</span>`:m?`<span class="media">${m}</span>`:""}</span></div></div>`}
 function lastUpd(i){const u=i.updates||[];return u.length?u.map(x=>x.date).sort().pop():""}
 function drawList(){
  const s=q.value.trim().toLowerCase();
@@ -275,11 +291,11 @@ function drawTracking(){
  const fs=data.items.filter(i=>FOL.has(i.id)&&!caseIds.has(i.id)).sort((a,b)=>b.date.localeCompare(a.date));
  if(!cs.length&&!fs.length){el.innerHTML="";return}
  el.innerHTML=`<h2>Following</h2>`+cs.map(c=>{const tl=c.timeline||[],first=tl.length?tl[tl.length-1].date:"",days=first?Math.max(0,Math.round((Date.now()-new Date(first+"T12:00:00"))/864e5)):"–",reports=tl.filter(t=>safe(t.url)).length;
-  return `<div class="case"><div class="o"><div class="ohd"><span class="pill">${esc(c.town)} · ${esc(c.place)}</span>${caseItem(c)?folBtn(caseItem(c).id):""}</div><h3>${esc(c.title)}</h3><p class="status">${esc(c.status)}</p><p>${esc(c.summary)}</p><div class="cstats"><div><b>${fmt(first)}</b><span>Incident</span></div><div><b>${days}</b><span>Days open</span></div><div><b>${reports}</b><span>Reports</span></div></div></div><div class="l"><ul class="tl">${tl.map((t,k)=>`<li data-t="${esc(c.id)}-${k}" tabindex="0" role="button"><time>${fmt(t.date)}</time>${esc(t.text)} <b>${esc(t.source)} →</b></li>`).join("")}</ul></div></div>`}).join("")+fs.map(card).join("");
+  return `<div class="case"><div class="o">${caseItem(c)?folBtn(caseItem(c).id):""}<div class="ohd"><span class="pill">${esc(c.town)} · ${esc(c.place)}</span></div><h3>${esc(c.title)}</h3><p class="status">${esc(c.status)}</p><p>${esc(c.summary)}</p><div class="cstats"><div><b>${fmt(first)}</b><span>Incident</span></div><div><b>${days}</b><span>Days open</span></div><div><b>${reports}</b><span>Reports</span></div></div></div><div class="l"><ul class="tl">${tl.map((t,k)=>`<li data-t="${esc(c.id)}-${k}" tabindex="0" role="button"><time>${fmt(t.date)}</time>${esc(t.text)} <b>${esc(t.source)} →</b></li>`).join("")}</ul></div></div>`}).join("")+fs.map(card).join("");
 }
 function sheetHTML(o){
  const u=safe(o.url),facts=(o.facts||[]).map(f=>`<div><b>${esc(f[1])}</b><span>${esc(f[0])}</span></div>`).join(""),body=(o.body&&o.body.length?o.body:[o.summary]).map(p=>`<p>${esc(p)}</p>`).join("");
- return `<div class="bar"><span>${esc(o.town)} · ${esc(o.cat)}</span><span class="acts">${o.id?folBtn(o.ref||o.id):""}<button type="button" class="x" id="shClose" aria-label="Close">×</button></span></div>
+ return `<div class="bar"><span>${esc(o.town)} · ${esc(o.cat)}</span><span class="acts"><button type="button" class="x" id="shClose" aria-label="Close">×</button></span></div>
  ${imgOK(o)||o.video?"":`<div class="art">${doodle(o.cat)}</div>`}
  <div class="meta"><time>${longDate(o.date)}</time><span>${esc(o.source)}</span>${ML[o.media]?`<span>${ML[o.media]}</span>`:""}</div>
  <h3 id="shTitle">${esc(o.title)}</h3>
@@ -293,7 +309,7 @@ function sheetHTML(o){
  <p class="note">Summary written by Oeste from ${esc(o.source)}'s reporting.</p>`;
 }
 function openSheet(o){if(!o)return closeSheet(true);sheet.style.background=TC[o.town]||"var(--lime)";shIn.innerHTML=sheetHTML(o);sheet.hidden=false;document.body.style.overflow="hidden";sheet.scrollTop=0;$("shClose").focus()}
-function closeSheet(silent){sheet.hidden=true;document.body.style.overflow="";if(!silent&&/^#([st]-|weather$|moon$)/.test(location.hash))history.back()}
+function closeSheet(silent){sheet.hidden=true;document.body.style.overflow="";if(!silent&&/^#([st]-|weather$|moon$|earth$)/.test(location.hash))history.back()}
 function route(){
  const h=location.hash.slice(1);
  if(h.startsWith("s-")){const it=data.items.find(i=>"s-"+i.id===h);openSheet(it&&{...it,caseLink:!!it.case})}
@@ -301,6 +317,7 @@ function route(){
   openSheet(t&&{town:c.town,cat:"Case",date:t.date,source:t.source,url:t.url,title:t.text,body:t.body,facts:[["Case",c.title],["Status",c.status]]})}
  else if(h==="weather")openPanel(weatherHTML(),"var(--sky)");
  else if(h==="moon")openPanel(moonHTML(),"var(--lilac)");
+ else if(h==="earth")openPanel(earthHTML(),"#cfeee8");
  else{closeSheet(true);if(h==="case")$("tracking").scrollIntoView({behavior:"smooth"})}
 }
 chips.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
@@ -310,10 +327,10 @@ $("grid").addEventListener("click",e=>{const b=e.target.closest("button[data-d]"
 $("prevM").addEventListener("click",()=>{mon=mon[1]?[mon[0],mon[1]-1]:[mon[0]-1,11];drawCal()});
 $("nextM").addEventListener("click",()=>{mon=mon[1]<11?[mon[0],mon[1]+1]:[mon[0]+1,0];drawCal()});
 $("dayClear").addEventListener("click",()=>{day="";drawChips();drawCal();drawList()});
-document.addEventListener("click",e=>{const f=e.target.closest(".fol");if(f){e.stopPropagation();toggleFol(f.dataset.f)}},true);
-list.addEventListener("click",e=>{if(e.target.closest(".fol"))return;const b=e.target.closest("[data-s]");if(b)location.hash="s-"+b.dataset.s});
-list.addEventListener("keydown",e=>{if(e.target.closest(".fol"))return;const b=e.target.closest("[data-s]");if(b&&(e.key==="Enter"||e.key===" ")){e.preventDefault();location.hash="s-"+b.dataset.s}});
-$("tracking").addEventListener("click",e=>{if(e.target.closest(".fol"))return;const li=e.target.closest("[data-t]");if(li){location.hash="t-"+li.dataset.t;return}const b=e.target.closest("[data-s]");if(b)location.hash="s-"+b.dataset.s});
+document.addEventListener("click",e=>{const f=e.target.closest(".ear");if(f){e.stopPropagation();toggleFol(f.dataset.f)}},true);
+list.addEventListener("click",e=>{if(e.target.closest(".ear"))return;const b=e.target.closest("[data-s]");if(b)location.hash="s-"+b.dataset.s});
+list.addEventListener("keydown",e=>{if(e.target.closest(".ear"))return;const b=e.target.closest("[data-s]");if(b&&(e.key==="Enter"||e.key===" ")){e.preventDefault();location.hash="s-"+b.dataset.s}});
+$("tracking").addEventListener("click",e=>{if(e.target.closest(".ear"))return;const li=e.target.closest("[data-t]");if(li){location.hash="t-"+li.dataset.t;return}const b=e.target.closest("[data-s]");if(b)location.hash="s-"+b.dataset.s});
 $("tracking").addEventListener("keydown",e=>{const li=e.target.closest("[data-t]");if(li&&(e.key==="Enter"||e.key===" ")){e.preventDefault();location.hash="t-"+li.dataset.t}});
 sheet.addEventListener("click",e=>{if(e.target.closest("#shClose"))closeSheet();else if(e.target.closest('a[href="#case"]')){e.preventDefault();sheet.hidden=true;document.body.style.overflow="";location.hash="case"}});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!sheet.hidden)closeSheet()});
@@ -385,12 +402,14 @@ const ICON={sun:'<circle cx="24" cy="24" r="8"/><path d="M24 6v5M24 37v5M6 24h5M
  rain:'<path d="M12 30a9 9 0 0 1 2-18 12 12 0 0 1 23 4 7 7 0 0 1-1 14Z"/><path d="M16 36l-2 6M25 36l-2 6M34 36l-2 6"/>',
  storm:'<path d="M12 28a9 9 0 0 1 2-18 12 12 0 0 1 23 4 7 7 0 0 1-1 14Z"/><path d="M25 30l-5 8h7l-4 8"/>'};
 const wIcon=(k,day,s)=>`<svg viewBox="0 0 48 48" width="${s}" height="${s}" fill="none" stroke="#151515" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k==="sun"&&day===0?"moon":k]}</svg>`;
-let W=null,MAR=null,wErr=false;
+let W=null,MAR=null,AQ=null,wErr=false;
+const aqiCat=v=>v==null?"":v<=50?"Good":v<=100?"Moderate":v<=150?"Unhealthy for sensitive groups":v<=200?"Unhealthy":v<=300?"Very unhealthy":"Hazardous";
 function loadWeather(){
  const u=`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,apparent_temperature,relative_humidity_2m,is_day,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m,precipitation&hourly=temperature_2m,weather_code,precipitation_probability,is_day&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset,uv_index_max&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=${encodeURIComponent(TZ)}&forecast_days=10`;
  const mu=`https://marine-api.open-meteo.com/v1/marine?latitude=18.36&longitude=-67.27&current=wave_height,wave_period,wave_direction,swell_wave_height,swell_wave_period&timezone=${encodeURIComponent(TZ)}`;
- return Promise.all([fetch(u).then(r=>r.ok?r.json():Promise.reject()),fetch(mu).then(r=>r.ok?r.json():null).catch(()=>null)])
-  .then(([w,m])=>{W=w;MAR=m;wErr=false;drawSky()}).catch(()=>{wErr=true;drawSky()});
+ const au=`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${LAT}&longitude=${LON}&current=us_aqi,pm2_5,dust&timezone=${encodeURIComponent(TZ)}`;
+ return Promise.all([fetch(u).then(r=>r.ok?r.json():Promise.reject()),fetch(mu).then(r=>r.ok?r.json():null).catch(()=>null),fetch(au).then(r=>r.ok?r.json():null).catch(()=>null)])
+  .then(([w,m,a])=>{W=w;MAR=m;AQ=a&&a.current;wErr=false;drawSky()}).catch(()=>{wErr=true;drawSky()});
 }
 const dirName=d=>["N","NE","E","SE","S","SW","W","NW"][Math.round(nrm(d)/45)%8];
 const ft=m=>m==null?"—":(m*3.281).toFixed(1)+" ft";
@@ -398,8 +417,9 @@ function drawSky(){
  const mn=moonNow(),wt=$("wxTile"),mt=$("moonTile");
  mt.innerHTML=`${moonSVG(mn.e,18)}<span>${esc(mn.phase.n)} in ${mn.sign}</span>`;
  if(W&&W.current){const c=W.current,d=W.daily,[t,k]=wx(c.weather_code);
-  wt.innerHTML=`${wIcon(k,c.is_day,36)}<b class="tv">${Math.round(c.temperature_2m)}°</b><span class="wxt"><b>Rincón</b> · ${t}<br>H:${Math.round(d.temperature_2m_max[0])}° L:${Math.round(d.temperature_2m_min[0])}°</span><span class="chev">›</span>`;
- }else wt.innerHTML=`${wIcon("pcloud",1,36)}<b class="tv">${wErr?"—":"…"}</b><span class="wxt"><b>Rincón</b><br>${wErr?"Weather unavailable":"Loading weather"}</span>`;
+  const aq=AQ&&AQ.us_aqi!=null?Math.round(AQ.us_aqi):null;
+  wt.innerHTML=`${wIcon(k,c.is_day,26)}<span class="wxt"><span class="wl">Rincón weather</span><span class="wline">${Math.round(c.temperature_2m)}°F <i>|</i> ${t} <i>|</i> Humidity ${Math.round(c.relative_humidity_2m)}% <i>|</i> Rain ${d.precipitation_probability_max[0]??0}%${aq!=null?` <i>|</i> AQI ${aq} ${aqiCat(aq)}`:""}</span></span><span class="chev">›</span>`;
+ }else wt.innerHTML=`${wIcon("pcloud",1,26)}<span class="wxt"><span class="wl">Rincón weather</span><span class="wline">${wErr?"Weather unavailable":"Loading…"}</span></span>`;
 }
 function weatherHTML(){
  if(!W||!W.current)return `<div class="bar"><span>Weather</span><button type="button" class="x" id="shClose" aria-label="Close">×</button></div><p class="body" style="margin-top:40px">${wErr?"Couldn't load the weather right now. Pull down on the main screen to try again.":"Loading…"}</p>`;
@@ -419,6 +439,7 @@ function weatherHTML(){
   ["Humidity",Math.round(c.relative_humidity_2m)+"%",""],
   ["Sunrise",tfmt(sr,{hour:"numeric",minute:"2-digit"}),"Sunset "+tfmt(ss,{hour:"numeric",minute:"2-digit"})],
   ["Rain chance",(d.precipitation_probability_max[0]??0)+"%","Today's highest chance."],
+  ...(AQ&&AQ.us_aqi!=null?[["Air quality","AQI "+Math.round(AQ.us_aqi),aqiCat(Math.round(AQ.us_aqi))+(AQ.dust>50?". Saharan dust in the air.":".")]]:[]),
   ...(mc?[["Waves",ft(mc.wave_height),mc.wave_period?Math.round(mc.wave_period)+" s period, from "+dirName(mc.wave_direction):""],["Swell",ft(mc.swell_wave_height),mc.swell_wave_period?Math.round(mc.swell_wave_period)+" s period":""]]:[])
  ].map(([a,b,s])=>`<div class="wt"><span>${a}</span><b>${esc(b)}</b>${s?`<small>${esc(s)}</small>`:""}</div>`).join("");
  return `<div class="bar"><span>Weather · Open-Meteo</span><button type="button" class="x" id="shClose" aria-label="Close">×</button></div>
@@ -505,15 +526,46 @@ $("wxTile").addEventListener("click",()=>{location.hash="weather"});
 $("wxTile").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();location.hash="weather"}});
 $("moonTile").addEventListener("click",()=>{location.hash="moon"});
 drawSky();loadWeather();setInterval(drawSky,6e5);
+$("earth").addEventListener("click",e=>{if(e.target.closest("[data-earth]"))location.hash="earth"});
+$("earth").addEventListener("keydown",e=>{if(e.target.closest("[data-earth]")&&(e.key==="Enter"||e.key===" ")){e.preventDefault();location.hash="earth"}});
+
+/* ---- Earth watch: live NWS alerts + USGS quakes + researched notes ---- */
+let ALERTS=null,QUAKES=null;
+const kmFrom=(la,lo)=>{const R=6371,dLa=(la-LAT)*rad,dLo=(lo-LON)*rad,a=Math.sin(dLa/2)**2+Math.cos(LAT*rad)*Math.cos(la*rad)*Math.sin(dLo/2)**2;return 2*R*Math.asin(Math.sqrt(a))};
+const WESTRX=/rinc|mayag|aguad|añasco|anasco|west|oeste|mona|northwest|southwest|cabo rojo|isabela/i;
+function loadEarth(){
+ const a=fetch("https://api.weather.gov/alerts/active?area=PR",{headers:{Accept:"application/geo+json"}}).then(r=>r.ok?r.json():Promise.reject()).then(j=>{ALERTS=(j.features||[]).map(f=>f.properties).filter(p=>p&&p.event)}).catch(()=>{ALERTS=ALERTS||"err"});
+ const q=fetch("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojson").then(r=>r.ok?r.json():Promise.reject()).then(j=>{QUAKES=(j.features||[]).map(f=>{const [lo,la,dp]=f.geometry.coordinates;return{mag:f.properties.mag,place:f.properties.place,time:new Date(f.properties.time),url:f.properties.url,tsu:f.properties.tsunami,depth:dp,km:kmFrom(la,lo)}}).filter(x=>x.km<=300).sort((x,y)=>y.time-x.time)}).catch(()=>{QUAKES=QUAKES||"err"});
+ return Promise.all([a,q]).then(drawEarth);
+}
+function earthLines(){const L=[];
+ if(Array.isArray(ALERTS)){const w=ALERTS.filter(p=>WESTRX.test(p.areaDesc||""));L.push(ALERTS.length?`${ALERTS.length} active alert${ALERTS.length>1?"s":""}${w.length?` · ${w.length} for the west`:""}: ${esc(ALERTS[0].event)}`:"No active weather alerts for Puerto Rico")}
+ else if(ALERTS==="err")L.push("Weather alerts unavailable");
+ if(Array.isArray(QUAKES)){const big=QUAKES.reduce((m,x)=>!m||x.mag>m.mag?x:m,null);L.push(QUAKES.length?`${QUAKES.length} quake${QUAKES.length>1?"s":""} M2.5+ within 300 km this week · largest M${big.mag.toFixed(1)}`:"No M2.5+ quakes within 300 km this week")}
+ else if(QUAKES==="err")L.push("Earthquake feed unavailable");
+ return L}
+function drawEarth(){const el=$("earth");if(!el)return;const notes=(data.earth||[]).slice().sort((a,b)=>b.date.localeCompare(a.date));
+ el.innerHTML=`<h2>Earth watch</h2><div class="item earthc" role="button" tabindex="0" data-earth="1"><div class="meta"><b>West coast</b><span>Alerts · Quakes · Climate · Nature</span></div><ul class="elines">${earthLines().map(l=>`<li>${l}</li>`).join("")}${notes.slice(0,2).map(n=>`<li><b>${esc(n.title)}</b></li>`).join("")}</ul><div class="foot"><span>NWS · USGS · ${notes.length} report${notes.length===1?"":"s"}</span><span>More ›</span></div></div>`}
+function earthHTML(){const notes=(data.earth||[]).slice().sort((a,b)=>b.date.localeCompare(a.date));
+ const when=d=>tfmt(d,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});
+ const al=Array.isArray(ALERTS)?(ALERTS.length?ALERTS.slice().sort((a,b)=>WESTRX.test(b.areaDesc||"")-WESTRX.test(a.areaDesc||"")).map(p=>`<p class="asp"><b>${esc(p.event)}</b>${WESTRX.test(p.areaDesc||"")?' <span class="pill2">West</span>':""}<br>${esc(p.headline||"")}<br><small>${esc(p.areaDesc||"")}</small></p>`).join(""):"<p>No active weather, flood, tsunami or tropical alerts for Puerto Rico right now.</p>"):"<p>Couldn't load alerts right now.</p>";
+ const qk=Array.isArray(QUAKES)?(QUAKES.length?QUAKES.slice(0,12).map(x=>`<p class="asp"><b>M${x.mag.toFixed(1)}</b> · ${esc(x.place||"")}${x.tsu?' <span class="pill2">Tsunami flag</span>':""}<br><small>${when(x.time)} · ${Math.round(x.km)} km from Rincón · ${Math.round(x.depth)} km deep${safe(x.url)?` · <a href="${esc(x.url)}" target="_blank" rel="noopener">USGS ↗</a>`:""}</small></p>`).join(""):"<p>No magnitude 2.5+ quakes within 300 km of Rincón in the past week.</p>"):"<p>Couldn't load the earthquake feed right now.</p>";
+ const nt=notes.map(n=>`<details class="enote"><summary><span class="meta"><b>${esc(n.cat)}</b><time>${fmt(n.date)}</time></span><b class="et">${esc(n.title)}</b><span class="es">${esc(n.summary)}</span></summary>${(n.body||[]).map(p=>`<p>${esc(p)}</p>`).join("")}${safe(n.url)?`<a class="srcl" href="${esc(n.url)}" target="_blank" rel="noopener">${esc(n.source)} ↗</a>`:""}</details>`).join("");
+ return `<div class="bar"><span>Earth watch</span><button type="button" class="x" id="shClose" aria-label="Close">×</button></div>
+ <h3 id="shTitle">Earth watch: the west coast</h3>
+ <div class="mread"><h5>Active alerts</h5>${al}</div>
+ <div class="mread"><h5>Quakes near Rincón, past 7 days</h5>${qk}</div>
+ <div class="mread"><h5>Climate &amp; nature reports</h5>${nt||"<p>No reports yet.</p>"}</div>
+ <p class="note">Alerts from the National Weather Service and quakes from USGS load live. Reports are researched and linked to their sources.</p>`}
 
 function load(){return fetch("news.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.json()).then(d=>{
  data=d;
  updMini();
  const u=new Date(d.updated);
  if(!isNaN(u))$("upd").textContent="Updated "+u.toLocaleString("en-US",{month:"short",day:"numeric",hour:"numeric",minute:"2-digit",timeZone:"America/Puerto_Rico"});
- drawTracking();drawList();drawCal();route();
+ drawTracking();drawList();drawCal();drawEarth();route();
 }).catch(()=>{list.innerHTML=`<p class="empty">Couldn't load the news right now. Pull down to refresh.</p>`})}
-load();
+load().then(loadEarth);
 const ptr=$("ptr"),wrap=document.querySelector(".wrap"),TH=72,HOLD=64;let y0=null,pull=0,busy=false,armed=false;
 const hap=(()=>{let lb=null;try{lb=document.createElement("label");lb.setAttribute("aria-hidden","true");lb.style.cssText="position:fixed;left:-99px;top:0;opacity:0;pointer-events:none";const i=document.createElement("input");i.type="checkbox";i.setAttribute("switch","");lb.appendChild(i);document.body.appendChild(lb)}catch(e){}
  return()=>{try{if(navigator.vibrate)navigator.vibrate(12);else if(lb)lb.click()}catch(e){}}})();
@@ -526,7 +578,7 @@ async function refresh(){
  try{const r=await fetch(location.pathname+"?v="+Date.now(),{cache:"no-store"});const t=await r.text();
   pageChanged=r.ok&&t.includes('data-build="')&&!t.includes('data-build="'+BUILD+'"');}catch(e){}
  if(pageChanged){try{await fetch(location.pathname,{cache:"reload"})}catch(e){}location.reload();return}
- await Promise.all([load(),loadWeather()]);
+ await Promise.all([load(),loadWeather(),loadEarth()]);
  await new Promise(r=>setTimeout(r,Math.max(0,600-(Date.now()-t0))));
  ptr.classList.remove("spin");setP(0,true);busy=false;
 }

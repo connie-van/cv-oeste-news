@@ -22,6 +22,13 @@ These rules are read at the start of every scheduled update. Follow all of them.
    b. Also add one new item dated the day of the update, with "ref" set to the original item's id, a title starting with "Update:", a summary of only what's new, plus facts and body as usual. Same town and category as the original.
 9. Nothing new about a known story → add nothing.
 
+## Earth watch
+Earth watch has live weather alerts (NWS) and earthquakes (USGS) built in. Your job is the "earth" list in news.json: short researched reports on climate and natural events that matter for Puerto Rico's west coast.
+- Cover: El Niño / La Niña updates (NOAA's monthly discussion), notable earthquakes or tsunami news for the Mona Passage and west coast, tropical storms and hurricanes threatening Puerto Rico, droughts, floods, sargassum, coral bleaching, and nature reports like unusual blooms, bee or honey seasons, turtle nesting and whale season.
+- West coast first: prefer stories about Rincón, Aguada, Aguadilla, Añasco, Mayagüez, the Mona Passage and Desecheo; island-wide stories are fine when they affect the west.
+- Facts only: every report needs a real source link (NOAA, NWS, USGS, Red Sísmica, DRNA, universities or established news outlets). No rumors or social-media posts.
+- Format: {id, date (YYYY-MM-DD), cat (Climate, Seismic, Tropics, Nature, Ocean), title, summary (1–2 sentences), body (2–3 short paragraphs), source, url}. Same archive rules: only append, skip duplicates, add a new dated report when there's real new information.
+
 ## Case tracker
 10. Flamas case (tracking id "flamas"): shooting ~1:24 a.m. Nov 20, 2026, in front of Restaurante Flamas, barrio Victoria, Aguadilla; victim Alejandro Chaparro, 66, of Aguada; CIC Aguadilla Homicide Division investigating. Search specifically for new developments each run. If found: add a timeline entry at the top {date, text, source, url, body} and update status and summary. If nothing new: only change the date on the top "No new public developments" entry to today.
 

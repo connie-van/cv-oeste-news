@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-build="bf15e97d">
+<html lang="en" data-build="9db0a8b7">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -68,10 +68,13 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
 .empty{color:var(--soft);opacity:.7;padding:20px 4px}
 .item{cursor:pointer;width:100%;text-align:left;border:0;font:inherit}
 .item{position:relative;overflow:hidden}
-.case .o{position:relative}
+.case .o{position:relative;--c:var(--orange)}
 .ear{position:absolute;top:0;right:0;width:52px;height:52px;border:0;background:transparent;padding:0;margin:0;cursor:pointer;z-index:2;-webkit-tap-highlight-color:transparent}
-.ear::after{content:"";position:absolute;top:0;right:0;width:0;height:0;background:linear-gradient(225deg,var(--bg) 50%,#151515 50%);border-bottom-left-radius:7px;box-shadow:-2px 3px 5px rgba(0,0,0,.18);transition:width .18s ease,height .18s ease}
-.ear[aria-pressed=true]::after{width:36px;height:36px}
+.ear svg{position:absolute;top:0;right:0;width:40px;height:40px;overflow:visible;transform:scale(0);transform-origin:100% 0;transition:transform .2s cubic-bezier(.2,.9,.3,1.2)}
+.ear[aria-pressed=true] svg{transform:scale(1)}
+.ear .cut{fill:var(--bg)}
+.ear .flap{fill:color-mix(in srgb,var(--c,#ccc) 72%,#151515);stroke:#151515;stroke-width:1.6;stroke-linejoin:round;filter:drop-shadow(-2px 3px 2px rgba(0,0,0,.18))}
+.item:has(>.ear[aria-pressed=true]),.case:has(.ear[aria-pressed=true]){border-top-right-radius:0}
 .ear:focus-visible{outline:3px solid var(--orange);outline-offset:-6px}
 .item .hd>svg{margin-top:12px}
 .earthc{background:#cfeee8}
@@ -247,7 +250,8 @@ const ML={photo:"Photo at source",photos:"Photos at source",video:"Video at sour
 let FOL=new Set(["agl-flamas"]);try{const f=localStorage.getItem("oeste-follow");if(f)FOL=new Set(JSON.parse(f))}catch(e){}
 const saveFol=()=>{try{localStorage.setItem("oeste-follow",JSON.stringify([...FOL]))}catch(e){}};
 const RIB='<svg viewBox="0 0 13 16" aria-hidden="true"><path d="M1.5 1.5h10v13L6.5 11l-5 3.5Z" fill="none" stroke="#151515" stroke-width="1.6" stroke-linejoin="round"/></svg>';
-const folBtn=id=>`<button type="button" class="ear" data-f="${esc(id)}" aria-pressed="${FOL.has(id)}" aria-label="${FOL.has(id)?"Unfollow":"Follow"} story"></button>`;
+const EAR='<svg viewBox="0 0 40 40" aria-hidden="true"><path class="cut" d="M0 0H40V40Z"/><path class="flap" d="M1 1L39 39H6Q1 39 1 34Z"/></svg>';
+const folBtn=id=>`<button type="button" class="ear" data-f="${esc(id)}" aria-pressed="${FOL.has(id)}" aria-label="${FOL.has(id)?"Unfollow":"Follow"} story">${EAR}</button>`;
 const caseItem=c=>data.items.find(i=>i.case===c.id);
 const caseFollowed=c=>{const it=caseItem(c);return it?FOL.has(it.id):true};
 function updMini(){const d=data,nr=d.items.filter(i=>i.town==="Rincón").length,nf=d.items.filter(i=>FOL.has(i.id)).length;$("mini").textContent=`${d.items.length} stories · ${nr} from Rincón · following ${nf}`}
@@ -261,7 +265,7 @@ const todayISO=()=>new Date().toLocaleDateString("en-CA",{timeZone:"America/Puer
 
 function drawChips(){chips.innerHTML=TOWNS.map(t=>`<button type="button" data-t="${esc(t)}" aria-pressed="${t===town}">${esc(t)}</button>`).join("")+`<button type="button" id="calBtn" aria-pressed="${calOpen||!!day}">Calendar</button>`}
 function card(i){const m=ML[i.media];
- return `<div class="item" role="button" tabindex="0" data-s="${esc(i.id)}" style="background:${TC[i.town]||"var(--sky)"}">${folBtn(i.ref||i.id)}<div class="hd"><div><div class="meta"><b>${esc(i.town)}</b><span>${esc(i.cat)}</span><time>${fmt(i.date)}</time></div><h4>${esc(i.title)}</h4></div>${imgOK(i)?"":doodle(i.cat)}</div>${picHTML(i)}<p>${esc(i.summary)}</p><div class="foot"><span>${esc(i.source)} ${i.ref?`<span class="flag">Update</span>`:lastUpd(i)?`<span class="flag">Updated ${fmt(lastUpd(i))}</span>`:m?`<span class="media">${m}</span>`:""}</span></div></div>`}
+ return `<div class="item" role="button" tabindex="0" data-s="${esc(i.id)}" style="--c:${TC[i.town]||"var(--sky)"};background:var(--c)">${folBtn(i.ref||i.id)}<div class="hd"><div><div class="meta"><b>${esc(i.town)}</b><span>${esc(i.cat)}</span><time>${fmt(i.date)}</time></div><h4>${esc(i.title)}</h4></div>${imgOK(i)?"":doodle(i.cat)}</div>${picHTML(i)}<p>${esc(i.summary)}</p><div class="foot"><span>${esc(i.source)} ${i.ref?`<span class="flag">Update</span>`:lastUpd(i)?`<span class="flag">Updated ${fmt(lastUpd(i))}</span>`:m?`<span class="media">${m}</span>`:""}</span></div></div>`}
 function lastUpd(i){const u=i.updates||[];return u.length?u.map(x=>x.date).sort().pop():""}
 function drawList(){
  const s=q.value.trim().toLowerCase();

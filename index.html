@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-build="4f993b84">
+<html lang="en" data-build="a388aba5">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -70,6 +70,11 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
 .empty{color:var(--soft);opacity:.7;padding:20px 4px}
 .item{cursor:pointer;width:100%;text-align:left;border:0;font:inherit}
 .item{position:relative;overflow:hidden}
+.case.shut .csum,.case.shut .cstats,.case.shut .l{display:none}
+.case:not(.shut) .latest{display:none}
+.latest{margin:4px 0 0!important;font-size:15px}.latest b{font-weight:600}
+.ctog{display:inline-flex;align-items:center;min-height:40px;margin-top:12px;padding:0 14px;border-radius:99px;border:1.5px solid #151515;background:transparent;color:#151515;font:600 13px "Instrument Sans",sans-serif;cursor:pointer}
+.case.shut .ctog{margin-top:10px}
 .case .o{position:relative;--c:var(--orange);--cd:#d8400a}
 .ear{position:absolute;top:0;right:0;width:52px;height:52px;border:0;background:transparent;padding:0;margin:0;cursor:pointer;z-index:2;-webkit-tap-highlight-color:transparent}
 .ear svg{position:absolute;top:0;right:0;width:40px;height:40px;overflow:visible;transform:scale(0);transform-origin:100% 0;transition:transform .2s cubic-bezier(.2,.9,.3,1.2)}
@@ -268,6 +273,7 @@ const saveFol=()=>{try{localStorage.setItem("oeste-follow",JSON.stringify([...FO
 const RIB='<svg viewBox="0 0 13 16" aria-hidden="true"><path d="M1.5 1.5h10v13L6.5 11l-5 3.5Z" fill="none" stroke="#151515" stroke-width="1.6" stroke-linejoin="round"/></svg>';
 const EAR='<svg viewBox="0 0 40 40" aria-hidden="true"><path class="cut" d="M0 0H40V40Z"/><path class="flap" d="M1 1L39 39H6Q1 39 1 34Z"/></svg>';
 const folBtn=id=>`<button type="button" class="ear" data-f="${esc(id)}" aria-pressed="${FOL.has(id)}" aria-label="${FOL.has(id)?"Unfollow":"Follow"} story">${EAR}</button>`;
+let COL=new Set();try{COL=new Set(JSON.parse(localStorage.getItem("oeste-collapsed")||"[]"))}catch(e){}
 const caseItem=c=>data.items.find(i=>i.case===c.id);
 const caseFollowed=c=>{const it=caseItem(c);return it?FOL.has(it.id):true};
 function updMini(){const d=data,nr=d.items.filter(i=>i.town==="Rincón").length;$("mini").textContent=`${d.items.length} stories · ${nr} Rincón`}
@@ -311,7 +317,8 @@ function drawTracking(){
  const fs=data.items.filter(i=>FOL.has(i.id)&&!caseIds.has(i.id)).sort((a,b)=>b.date.localeCompare(a.date));
  if(!cs.length&&!fs.length){el.innerHTML="";return}
  el.innerHTML=`<h2>Following</h2>`+cs.map(c=>{const tl=c.timeline||[],first=tl.length?tl[tl.length-1].date:"",days=first?Math.max(0,Math.round((Date.now()-new Date(first+"T12:00:00"))/864e5)):"–",reports=tl.filter(t=>safe(t.url)).length;
-  return `<div class="case"><div class="o">${caseItem(c)?folBtn(caseItem(c).id):""}<div class="ohd"><span class="pill">${esc(c.town)} · ${esc(c.place)}</span></div><h3>${esc(c.title)}</h3><p class="status">${esc(c.status)}</p><p>${esc(c.summary)}</p><div class="cstats"><div><b>${fmt(first)}</b><span>Incident</span></div><div><b>${days}</b><span>Days open</span></div><div><b>${reports}</b><span>Reports</span></div></div></div><div class="l"><ul class="tl">${tl.map((t,k)=>`<li data-t="${esc(c.id)}-${k}" tabindex="0" role="button"><time>${fmt(t.date)}</time>${esc(t.text)} <b>${esc(t.source)} →</b></li>`).join("")}</ul></div></div>`}).join("")+fs.map(card).join("");
+  const shut=COL.has(c.id),lt=tl[0];
+  return `<div class="case${shut?" shut":""}" data-case="${esc(c.id)}"><div class="o">${caseItem(c)?folBtn(caseItem(c).id):""}<div class="ohd"><span class="pill">${esc(c.town)} · ${esc(c.place)}</span></div><h3>${esc(c.title)}</h3><p class="status">${esc(c.status)}</p>${lt?`<p class="latest"><b>Latest · ${fmt(lt.date)}</b> ${esc(lt.text)}</p>`:""}<p class="csum">${esc(c.summary)}</p><div class="cstats"><div><b>${fmt(first)}</b><span>Incident</span></div><div><b>${days}</b><span>Days open</span></div><div><b>${reports}</b><span>Reports</span></div></div><button type="button" class="ctog" data-col="${esc(c.id)}" aria-expanded="${!shut}">${shut?"Show full case ▾":"Collapse ▴"}</button></div><div class="l"><ul class="tl">${tl.map((t,k)=>`<li data-t="${esc(c.id)}-${k}" tabindex="0" role="button"><time>${fmt(t.date)}</time>${esc(t.text)} <b>${esc(t.source)} →</b></li>`).join("")}</ul></div></div>`}).join("")+fs.map(card).join("");
 }
 function sheetHTML(o){
  const u=safe(o.url),facts=(o.facts||[]).map(f=>`<div><b>${esc(f[1])}</b><span>${esc(f[0])}</span></div>`).join(""),body=(o.body&&o.body.length?o.body:[o.summary]).map(p=>`<p>${esc(p)}</p>`).join("");
@@ -351,7 +358,7 @@ $("dayClear").addEventListener("click",()=>{day="";drawChips();drawCal();drawLis
 document.addEventListener("click",e=>{const f=e.target.closest(".ear");if(f){e.stopPropagation();toggleFol(f.dataset.f)}},true);
 list.addEventListener("click",e=>{if(e.target.closest(".ear"))return;const b=e.target.closest("[data-s]");if(b)location.hash="s-"+b.dataset.s});
 list.addEventListener("keydown",e=>{if(e.target.closest(".ear"))return;const b=e.target.closest("[data-s]");if(b&&(e.key==="Enter"||e.key===" ")){e.preventDefault();location.hash="s-"+b.dataset.s}});
-$("tracking").addEventListener("click",e=>{if(e.target.closest(".ear"))return;const li=e.target.closest("[data-t]");if(li){location.hash="t-"+li.dataset.t;return}const b=e.target.closest("[data-s]");if(b)location.hash="s-"+b.dataset.s});
+$("tracking").addEventListener("click",e=>{if(e.target.closest(".ear"))return;const tg=e.target.closest(".ctog");if(tg){const id=tg.dataset.col;COL.has(id)?COL.delete(id):COL.add(id);try{localStorage.setItem("oeste-collapsed",JSON.stringify([...COL]))}catch(x){}drawTracking();return}const li=e.target.closest("[data-t]");if(li){location.hash="t-"+li.dataset.t;return}const b=e.target.closest("[data-s]");if(b)location.hash="s-"+b.dataset.s});
 $("tracking").addEventListener("keydown",e=>{const li=e.target.closest("[data-t]");if(li&&(e.key==="Enter"||e.key===" ")){e.preventDefault();location.hash="t-"+li.dataset.t}});
 sheet.addEventListener("click",e=>{if(e.target.closest("#shClose"))closeSheet();else if(e.target.closest('a[href="#case"]')){e.preventDefault();sheet.hidden=true;document.body.style.overflow="";location.hash="case"}});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!sheet.hidden)closeSheet()});

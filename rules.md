@@ -22,6 +22,13 @@ These rules are read at the start of every scheduled update. Follow all of them.
    b. Also add one new item dated the day of the update, with "ref" set to the original item's id, a title starting with "Update:", a summary of only what's new, plus facts and body as usual. Same town and category as the original.
 9. Nothing new about a known story → add nothing.
 
+## Power & internet (check every run)
+news.json has a "utilities" object: {checked, area, luma:{status, headline, detail, updates[]}, claro:{...}}. The focus area is Rincón's pueblo (Barrio Pueblo), Sector Villa Angélica and Sector Corea (Korea).
+- Each run, check: LUMA's service status and planned-work list (lumapr.com, lumapr.com/mejorasplanificadas), LUMA and Claro Puerto Rico posts, and news about outages, load shedding (relevos de carga), brownouts, voltage drops or fiber cuts affecting Rincón or the Mayagüez region. If the Rincón outages Facebook group (https://www.facebook.com/groups/1026755354056860/) is readable without logging in, use posts there only as leads, and say "neighbors report" unless an official source or news outlet confirms.
+- status is one of: ok, issue (outage), unstable (brownouts, flickering, slow or intermittent service), planned (scheduled work), restored, unknown. headline is a few words ("Outage in pueblo since 2 p.m."); detail is 1–3 sentences on what's affected and what's known.
+- Add an entry to updates [{time (ISO with -04:00), text, source, url}] whenever something changes: a new outage, an estimated restoration time, crews on site, service restored. Keep older entries; drop entries older than 14 days.
+- Always set "checked" to the current time, even when nothing changed. Never claim a service is working or down without a source; if you can't tell, use unknown.
+
 ## Earth watch
 Earth watch has live weather alerts (NWS) and earthquakes (USGS) built in. Your job is the "earth" list in news.json: short researched reports on climate and natural events that matter for Puerto Rico's west coast.
 - Cover: El Niño / La Niña updates (NOAA's monthly discussion), notable earthquakes or tsunami news for the Mona Passage and west coast, tropical storms and hurricanes threatening Puerto Rico, droughts, floods, sargassum, coral bleaching, and nature reports like unusual blooms, bee or honey seasons, turtle nesting and whale season.

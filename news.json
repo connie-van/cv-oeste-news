@@ -657,5 +657,28 @@
       "source": "El Nuevo Día",
       "url": "https://www.elnuevodia.com/noticias/locales/notas/registran-temblor-de-magnitud-44-al-sureste-de-republica-dominicana/"
     }
-  ]
+  ],
+  "utilities": {
+    "checked": "2026-11-25T19:30:00-04:00",
+    "area": "Rincón pueblo · Villa Angélica · Corea",
+    "luma": {
+      "status": "ok",
+      "headline": "No outage reported",
+      "detail": "No outage or load-shedding reports found for Rincón's pueblo area. LUMA had scheduled equipment work on Calle Caney in Rincón for Nov 25, which could cause brief interruptions.",
+      "updates": [
+        {
+          "time": "2026-11-25T07:00:00-04:00",
+          "text": "LUMA listed installation of automated equipment on Calle Caney in Rincón for today; brief interruptions possible.",
+          "source": "Primera Hora",
+          "url": "https://primerahora.com/noticias/puerto-rico/notas/estos-17-pueblos-pueden-sufrir-cortes-de-luz-antes-de-accion-de-gracias"
+        }
+      ]
+    },
+    "claro": {
+      "status": "ok",
+      "headline": "No outage reported",
+      "detail": "No reports of Claro internet, mobile or TV problems in Rincón or western Puerto Rico.",
+      "updates": []
+    }
+  }
 }

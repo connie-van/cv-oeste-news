@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-build="8600fc8b">
+<html lang="en" data-build="4f993b84">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -80,6 +80,12 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
 .ear:focus-visible{outline:3px solid var(--orange);outline-offset:-6px}
 .item .hd>svg{margin-top:12px}
 .earthc{background:#cfeee8}
+#util .item{margin-top:16px}.utilc{background:#f7e3d3}
+.urow{display:grid;grid-template-columns:14px 52px minmax(0,1fr);align-items:center;gap:6px;padding:8px 0;border-bottom:1px solid var(--line);font-size:15px}
+.urow b{font-weight:600}
+.udot{display:inline-block;width:10px;height:10px;border-radius:50%;flex:none}
+.mread h5 .udot{vertical-align:3px}
+.ulinks{font-size:14px;margin-top:10px!important}
 .elines{margin:10px 0 0;padding:0 0 0 18px;font-size:15px;line-height:1.45}.elines li{margin:4px 0}
 .enote{border-top:1px solid var(--line);padding:10px 0}.enote summary{list-style:none;cursor:pointer}.enote summary::-webkit-details-marker{display:none}
 .enote .et{display:block;font:400 21px/1.2 Newsreader,Georgia,serif;margin:4px 0}.enote .es{display:block;font-size:15px}.enote p{font-size:16px;line-height:1.55;margin:10px 0 0}
@@ -169,7 +175,6 @@ footer{font-size:13px;opacity:.7;margin:28px 4px 0}
 .wc b svg{width:24px;height:24px}
 .wc span{font-size:11px;line-height:1.25}
 .wcmsg{grid-column:span 4;justify-content:center;height:100%}
-.wc1-old{.wc1 b{font:400 34px/1 Newsreader,Georgia,serif;white-space:nowrap}.wc1 span,.wc2 span,.wc3 span{font-size:12px;line-height:1.35}
 .wc2{gap:4px}.wc3 span{display:block}
 .wxcard svg{width:26px;height:26px;flex:none}
 .wxcard .wl{display:block;font-size:12px;font-weight:600;opacity:.7;margin-bottom:2px}
@@ -212,6 +217,7 @@ html{overscroll-behavior-y:none}
   <div class="wxcard" id="wxTile" role="button" tabindex="0" aria-label="Weather in Rincón"></div>
 </section>
 
+<section id="util"></section>
 <section id="tracking"></section>
 
 <section id="earth"></section>
@@ -323,7 +329,7 @@ function sheetHTML(o){
  <p class="note">Summary written by Oeste from ${esc(o.source)}'s reporting.</p>`;
 }
 function openSheet(o){if(!o)return closeSheet(true);sheet.style.background=TC[o.town]||"var(--lime)";shIn.innerHTML=sheetHTML(o);sheet.hidden=false;document.body.style.overflow="hidden";sheet.scrollTop=0;$("shClose").focus()}
-function closeSheet(silent){sheet.hidden=true;document.body.style.overflow="";if(!silent&&/^#([st]-|weather$|moon$|earth$)/.test(location.hash))history.back()}
+function closeSheet(silent){sheet.hidden=true;document.body.style.overflow="";if(!silent&&/^#([st]-|weather$|moon$|earth$|power$)/.test(location.hash))history.back()}
 function route(){
  const h=location.hash.slice(1);
  if(h.startsWith("s-")){const it=data.items.find(i=>"s-"+i.id===h);openSheet(it&&{...it,caseLink:!!it.case})}
@@ -332,6 +338,7 @@ function route(){
  else if(h==="weather")openPanel(weatherHTML(),"var(--sky)");
  else if(h==="moon")openPanel(moonHTML(),"var(--lilac)");
  else if(h==="earth")openPanel(earthHTML(),"#cfeee8");
+ else if(h==="power")openPanel(utilHTML(),"#f7e3d3");
  else{closeSheet(true);if(h==="case")$("tracking").scrollIntoView({behavior:"smooth"})}
 }
 chips.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
@@ -542,6 +549,8 @@ $("wxTile").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.pr
 $("moonTile").addEventListener("click",()=>{location.hash="moon"});
 drawSky();loadWeather();setInterval(drawSky,6e5);
 $("earth").addEventListener("click",e=>{if(e.target.closest("[data-earth]"))location.hash="earth"});
+$("util").addEventListener("click",e=>{if(e.target.closest("[data-util]"))location.hash="power"});
+$("util").addEventListener("keydown",e=>{if(e.target.closest("[data-util]")&&(e.key==="Enter"||e.key===" ")){e.preventDefault();location.hash="power"}});
 $("earth").addEventListener("keydown",e=>{if(e.target.closest("[data-earth]")&&(e.key==="Enter"||e.key===" ")){e.preventDefault();location.hash="earth"}});
 
 /* ---- Earth watch: live NWS alerts + USGS quakes + researched notes ---- */
@@ -573,12 +582,29 @@ function earthHTML(){const notes=(data.earth||[]).slice().sort((a,b)=>b.date.loc
  <div class="mread"><h5>Climate &amp; nature reports</h5>${nt||"<p>No reports yet.</p>"}</div>
  <p class="note">Alerts from the National Weather Service and quakes from USGS load live. Reports are researched and linked to their sources.</p>`}
 
+/* ---- Power & internet (LUMA / Claro) ---- */
+const UST={ok:["#2a9d55","OK"],issue:["#d8400a","Outage"],unstable:["#e08a00","Unstable"],planned:["#d9a400","Planned work"],restored:["#2a9d55","Restored"],unknown:["#8a8a8a","Unknown"]};
+const dot=s=>`<i class="udot" style="background:${(UST[s]||UST.unknown)[0]}"></i>`;
+const tAgo=iso=>{const t=new Date(iso);if(isNaN(t))return"";return t.toLocaleString("en-US",{timeZone:TZ,month:"short",day:"numeric",hour:"numeric",minute:"2-digit"})};
+function drawUtil(){const el=$("util"),u=data.utilities;if(!el)return;if(!u){el.innerHTML="";return}
+ const row=(n,s)=>`<div class="urow">${dot(s.status)}<b>${n}</b><span>${esc(s.headline||(UST[s.status]||UST.unknown)[1])}</span></div>`;
+ el.innerHTML=`<div class="item utilc" role="button" tabindex="0" data-util="1"><div class="meta"><b>Power &amp; internet</b><span>${esc(u.area||"Rincón")}</span></div>${row("LUMA",u.luma||{})}${row("Claro",u.claro||{})}<div class="foot"><span>Checked ${esc(tAgo(u.checked))}</span><span>More ›</span></div></div>`}
+function utilHTML(){const u=data.utilities||{};
+ const sec=(n,s,links)=>`<div class="mread"><h5>${dot(s.status)} ${n}: ${esc(s.headline||"")}</h5><p>${esc(s.detail||"")}</p>${(s.updates||[]).slice().sort((a,b)=>String(b.time).localeCompare(String(a.time))).map(x=>{const xu=safe(x.url);return `<p class="asp"><small>${esc(tAgo(x.time))}</small><br>${esc(x.text)} ${xu?`<a href="${esc(xu)}" target="_blank" rel="noopener">${esc(x.source)} ↗</a>`:esc(x.source||"")}</p>`}).join("")}<p class="ulinks">${links}</p></div>`;
+ return `<div class="bar"><span>Power &amp; internet</span><button type="button" class="x" id="shClose" aria-label="Close">×</button></div>
+ <h3 id="shTitle">${esc(u.area||"Rincón")}</h3>
+ <div class="meta"><span>Last checked ${esc(tAgo(u.checked))}</span></div>
+ ${sec("LUMA",u.luma||{},`<a href="https://lumapr.com/" target="_blank" rel="noopener">LUMA service status ↗</a> · <a href="https://lumapr.com/mejorasplanificadas/" target="_blank" rel="noopener">Planned work ↗</a>`)}
+ ${sec("Claro",u.claro||{},`<a href="https://www.claropr.com/" target="_blank" rel="noopener">Claro ↗</a> · Report a problem: *611 from a Claro phone or 787-775-0000`)}
+ <div class="mread"><h5>Neighbors</h5><p><a href="https://www.facebook.com/groups/1026755354056860/" target="_blank" rel="noopener">Rincón outages Facebook group ↗</a></p></div>
+ <p class="note">Status is checked during each news update against LUMA, Claro and news reports. It isn't live; for real-time status use the links above.</p>`}
+
 function load(){return fetch("news.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.json()).then(d=>{
  data=d;
  updMini();
  const u=new Date(d.updated);
  if(!isNaN(u)){const day=x=>x.toLocaleDateString("en-CA",{timeZone:"America/Puerto_Rico"}),tm=u.toLocaleString("en-US",{hour:"numeric",minute:"2-digit",timeZone:"America/Puerto_Rico"});$("upd").textContent="Updated "+(day(u)===day(new Date())?tm:u.toLocaleString("en-US",{month:"short",day:"numeric",timeZone:"America/Puerto_Rico"})+", "+tm)}
- drawTracking();drawList();drawCal();drawEarth();route();
+ drawUtil();drawTracking();drawList();drawCal();drawEarth();route();
 }).catch(()=>{list.innerHTML=`<p class="empty">Couldn't load the news right now. Pull down to refresh.</p>`})}
 load().then(loadEarth);
 const ptr=$("ptr"),wrap=document.querySelector(".wrap"),TH=72,HOLD=64;let y0=null,pull=0,busy=false,armed=false;
@@ -602,6 +628,10 @@ window.addEventListener("touchstart",e=>{if(busy||!sheet.hidden||window.scrollY>
 window.addEventListener("touchmove",e=>{if(y0===null)return;const d=e.touches[0].clientY-y0;if(window.scrollY>0||d<0){if(pull)setP(0,true);pull=0;return}
  pull=damp(d);if(e.cancelable)e.preventDefault();setP(pull,false);
  if(pull>=TH&&!armed){armed=true;hap()}else if(pull<TH&&armed)armed=false},{passive:false});
+window.addEventListener("touchcancel",()=>{y0=null;pull=0;armed=false;if(!busy)setP(0,true)});
+const resetPull=()=>{y0=null;pull=0;armed=false;busy=false;ptr.classList.remove("spin");setP(0,false)};
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)resetPull()});
+window.addEventListener("pageshow",resetPull);
 window.addEventListener("touchend",()=>{if(y0===null)return;y0=null;if(pull>=TH)refresh();else setP(0,true);pull=0;armed=false});
 $("upd").addEventListener("click",()=>{if(!busy)refresh()});
 }

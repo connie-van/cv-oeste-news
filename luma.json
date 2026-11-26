@@ -1,15 +1,15 @@
 {
- "checked": "2026-11-26T10:19-04:00",
+ "checked": "2026-11-26T19:15-04:00",
  "ok": true,
  "error": null,
- "lumaTime": "11/26/2026 10:15 AM",
+ "lumaTime": "11/26/2026 07:15 PM",
  "region": {
   "name": "Mayagüez",
   "total": 216605,
-  "out": 1628,
+  "out": 16489,
   "planned": 0,
   "loadShed": 0,
-  "pctOut": 0.75
+  "pctOut": 7.61
  },
  "rincon": []
 }

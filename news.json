@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-25T05:50:00-04:00",
+  "updated": "2026-11-25T17:50:00-04:00",
   "tracking": [
     {
       "id": "flamas",
@@ -628,6 +628,104 @@
       ],
       "source": "Metro PR",
       "url": "https://www.metro.pr/noticias/2026/11/24/oleaje-elevara-el-riesgo-de-corrientes-marinas-en-playas-de-la-costa-norte"
+    },
+    {
+      "id": "rin-cj-1125",
+      "town": "Rincón",
+      "date": "2026-11-25",
+      "cat": "Travel",
+      "title": "Caribbean Journal pitches Rincón as a weekend escape from San Juan",
+      "summary": "A new travel feature tells visitors to skip the capital and spend about three nights in Rincón for surf, small oceanfront inns and sunset drinks.",
+      "facts": [
+        [
+          "Drive from SJU",
+          "About 2.5 hours"
+        ],
+        [
+          "Suggested stay",
+          "3 nights"
+        ],
+        [
+          "Faster option",
+          "Fly into BQN"
+        ],
+        [
+          "Also named",
+          "Thursday Art Walk"
+        ]
+      ],
+      "body": [
+        "The Caribbean Journal piece frames Rincón as a destination on its own rather than a day trip, and suggests flying into Aguadilla to reach the west coast sooner, with a rental car for getting around.",
+        "It matches beaches to conditions: watching surf from Domes near the Punta Higüero lighthouse, snorkeling at Steps in the Tres Palmas reserve on calm days, and the public balneario when swells are up. Sandy Beach is suggested for lunch, and the plaza's Thursday evening Art Walk gets a mention.",
+        "Places to stay and drink named in the story include Tamboo and Casa Isleña near Sandy Beach, and Villa Cofresí for its coconut rum cocktail."
+      ],
+      "source": "Caribbean Journal",
+      "url": "https://www.caribjournal.com/2026/11/25/skip-san-juan-puerto-rico-rincon/"
+    },
+    {
+      "id": "may-flood-1123",
+      "town": "Mayagüez",
+      "date": "2026-11-23",
+      "cat": "Weather",
+      "title": "Flood advisory for Mayagüez, Añasco and four mountain towns",
+      "summary": "The National Weather Service warned of urban and small-stream flooding Monday afternoon after radar estimated 1 to 2.5 inches of rain. The advisory ran until 6 p.m.",
+      "facts": [
+        [
+          "Issued",
+          "3:29 p.m., Mon Nov 23"
+        ],
+        [
+          "Until",
+          "6:00 p.m."
+        ],
+        [
+          "Rain so far",
+          "1–2.5 in"
+        ],
+        [
+          "Also",
+          "Añasco, Lares, Las Marías, Maricao, San Sebastián"
+        ]
+      ],
+      "body": [
+        "Doppler radar showed 1 to 2.5 inches of rain had already fallen over parts of the western interior and coast, with another 1 to 2 inches possible, so the hardest-hit spots could see 2 to 4.5 inches in total.",
+        "Forecasters warned of flooding on streets with poor drainage and of small creeks and normally dry channels rising fast. The advice was the usual: don't drive into flooded roads, since most flood deaths happen in vehicles, and report flooding when it's safe to do so."
+      ],
+      "source": "Metro PR",
+      "url": "https://www.metro.pr/noticias/2026/11/23/snm-emite-advertencia-de-inundaciones-para-seis-municipios-del-oeste"
+    },
+    {
+      "id": "agl-surf-1125",
+      "town": "Aguadilla",
+      "date": "2026-11-25",
+      "cat": "Weather",
+      "title": "High rip-current risk from Aguadilla east; hot, mostly dry Thanksgiving",
+      "summary": "The National Weather Service kept a high rip-current risk for north-coast beaches from Aguadilla to Fajardo heading into Thanksgiving. Heat index values could top 100°F Thursday, with more showers Friday, mainly in the west.",
+      "facts": [
+        [
+          "Rip currents",
+          "High risk, Aguadilla–Fajardo"
+        ],
+        [
+          "Heat index",
+          "Locally 100°F+"
+        ],
+        [
+          "Thanksgiving",
+          "Mostly dry"
+        ],
+        [
+          "Friday",
+          "More showers, mostly west"
+        ]
+      ],
+      "body": [
+        "Forecasters warned that the calm, sunny weather could tempt people into the water even though rip currents along the north coast are strong enough to pull experienced swimmers out.",
+        "Thursday should be mostly dry and stable, with only a few short afternoon showers. Heat is the bigger concern: heat index values could pass 100°F in coastal and urban areas on Thanksgiving and Friday.",
+        "Friday brings a better chance of showers and some urban and small-stream flooding, mainly over western Puerto Rico."
+      ],
+      "source": "El Nuevo Día",
+      "url": "https://www.elnuevodia.com/noticias/el-tiempo/notas/cuidado-advierten-sobre-peligrosas-condiciones-maritimas-de-cara-al-dia-de-accion-de-gracias/"
     }
   ],
   "earth": [

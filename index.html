@@ -629,10 +629,16 @@ let LL=null;
 function leaflet(){if(window.L)return Promise.resolve(window.L);if(LL)return LL;
  LL=new Promise((ok,no)=>{const c=document.createElement("link");c.rel="stylesheet";c.href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css";document.head.appendChild(c);
   const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";s.onload=()=>ok(window.L);s.onerror=()=>{LL=null;no()};document.head.appendChild(s)});return LL}
-async function geocode(place,town){const key="oeste-geo:"+place+"|"+town;try{const c=localStorage.getItem(key);if(c)return JSON.parse(c)}catch(e){}
- const tries=[`${place}, ${town}, Puerto Rico`,`${place.replace(/^(calle|carr\.?|carretera|sector|urb\.?|barrio|bo\.?)\s+/i,"")}, ${town}, Puerto Rico`];
- for(const q of tries){try{const r=await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=pr&q=${encodeURIComponent(q)}`,{headers:{"Accept-Language":"en"}});const j=await r.json();
-  if(j&&j[0]){const res={lat:+j[0].lat,lon:+j[0].lon,name:j[0].display_name,exact:true};try{localStorage.setItem(key,JSON.stringify(res))}catch(e){}return res}}catch(e){}}
+const WBOX=[-67.32,18.12,-67.02,18.48];/* west coast: lonmin,latmin,lonmax,latmax */
+const inW=(la,lo)=>lo>=WBOX[0]&&lo<=WBOX[2]&&la>=WBOX[1]&&la<=WBOX[3];
+async function geocode(place,town){const key="oeste-geo2:"+place+"|"+town;try{const c=localStorage.getItem(key);if(c)return JSON.parse(c)}catch(e){}
+ const bare=place.replace(/^(calle|c\/|carr\.?|carretera|sector|urb\.?|barrio|bo\.?)\s+/i,"");
+ const tries=[`${place}, ${town}, Puerto Rico`,`${bare}, ${town}, Puerto Rico`,`${place}, Puerto Rico`];
+ const save=res=>{try{localStorage.setItem(key,JSON.stringify(res))}catch(e){}return res};
+ for(const q of tries){try{const r=await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=pr&viewbox=${WBOX.join(",")}&bounded=1&q=${encodeURIComponent(q)}`,{headers:{"Accept-Language":"en"}});const j=await r.json();
+  if(j&&j[0]&&inW(+j[0].lat,+j[0].lon))return save({lat:+j[0].lat,lon:+j[0].lon,name:j[0].display_name,exact:true})}catch(e){}}
+ for(const q of [`${place} ${town}`,`${bare} ${town}`]){try{const r=await fetch(`https://photon.komoot.io/api/?limit=1&bbox=${WBOX.join(",")}&q=${encodeURIComponent(q)}`);const j=await r.json();const f=j&&j.features&&j.features[0];
+  if(f){const [lo,la]=f.geometry.coordinates;if(inW(la,lo))return save({lat:la,lon:lo,name:f.properties.name,exact:true})}}catch(e){}}
  const t=TOWNC[town]||TOWNC["Rincón"];return{lat:t[0],lon:t[1],exact:false}}
 let MAPO=null;
 async function openMap(id,fi){const it=data.items.find(i=>i.id===id);if(!it)return;const place=it.facts[fi][1],town=it.town;
@@ -642,14 +648,17 @@ async function openMap(id,fi){const it=data.items.find(i=>i.id===id);if(!it)retu
  <div id="mapbox" class="mapbox"></div>
  <p class="mlegend"><i class="mk mk1"></i>Roughly here <i class="mk mk2"></i>For reference</p>
  <p id="mapLinks" class="ulinks"></p>
- <p class="note">Map data © OpenStreetMap contributors, tiles © CARTO. Locations are approximate.</p>`;
+ <p class="note" id="mapCredit">Map data and tiles © OpenStreetMap contributors. Locations are approximate.</p>`;
  sheet.hidden=false;document.body.style.overflow="hidden";sheet.scrollTop=0;
  let L;try{L=await leaflet()}catch(e){$("mapNote").textContent="Couldn't load the map right now.";return}
  const g=await geocode(place,town);if(!$("mapbox"))return;
  $("mapNote").textContent=g.exact?`Approximate spot from OpenStreetMap`:`Couldn't pinpoint “${place}”, so this shows ${town}'s town center`;
  if(MAPO){try{MAPO.remove()}catch(e){}}
  MAPO=L.map("mapbox",{zoomControl:true,attributionControl:false}).setView([g.lat,g.lon],g.exact?15:14);
- L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{maxZoom:19,subdomains:"abcd"}).addTo(MAPO);
+ let tl=L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19}).addTo(MAPO),bad=0,ok=0;
+ tl.on("tileload",()=>ok++);tl.on("tileerror",()=>{if(++bad>=3&&!ok&&tl){MAPO.removeLayer(tl);tl=null;
+  L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",{maxZoom:19}).addTo(MAPO);
+  const n=document.querySelector("#mapCredit");if(n)n.textContent="Map data © OpenStreetMap contributors · tiles © Esri. Locations are approximate."}});
  L.circle([g.lat,g.lon],{radius:g.exact?180:600,color:"#151515",weight:1,fillColor:"#ff5f1f",fillOpacity:.25}).addTo(MAPO);
  L.circleMarker([g.lat,g.lon],{radius:8,color:"#151515",weight:1.5,fillColor:"#ff5f1f",fillOpacity:1}).addTo(MAPO).bindTooltip(place,{permanent:true,direction:"top",offset:[0,-8],className:"mtip"});
  const pts=[[g.lat,g.lon]];

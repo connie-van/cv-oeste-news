@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-build="76f0efa3">
+<html lang="en" data-build="0cec88b8">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -90,6 +90,11 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
 .urow b{font-weight:600}
 .udot{display:inline-block;width:10px;height:10px;border-radius:50%;flex:none}
 .mread h5 .udot{vertical-align:3px}
+.fmap{display:block;padding:10px 8px 10px 0;border-bottom:1px solid var(--line);color:inherit;text-decoration:none}.fmap b{display:block;font:400 19px/1.2 Newsreader,Georgia,serif;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}.fmap span{font-size:12px}
+.mapbox{height:58vh;min-height:320px;border-radius:20px;overflow:hidden;margin-top:14px;border:1px solid var(--line);background:#e8e4da}
+.mlegend{font-size:13px;margin-top:10px!important;display:flex;align-items:center;gap:6px;flex-wrap:wrap}.mk{display:inline-block;width:12px;height:12px;border-radius:50%;border:1.3px solid #151515;margin-left:8px}.mk1{background:#ff5f1f;margin-left:0}.mk2{background:#fff}
+.leaflet-tooltip.mtip{background:#151515;color:#fff;border:0;border-radius:99px;padding:3px 9px;font:600 12px "Instrument Sans",sans-serif;box-shadow:none}.leaflet-tooltip.mtip:before{display:none}.leaflet-tooltip.mtip2{background:#fff;color:#151515;border:1px solid #151515}
+.ulinks a{color:#151515;font-weight:600}
 .ulinks{font-size:14px;margin-top:10px!important}
 .elines{margin:10px 0 0;padding:0 0 0 18px;font-size:15px;line-height:1.45}.elines li{margin:4px 0}
 .enote{border-top:1px solid var(--line);padding:10px 0}.enote summary{list-style:none;cursor:pointer}.enote summary::-webkit-details-marker{display:none}
@@ -331,7 +336,7 @@ function drawTracking(){
   return `<div class="case${shut?" shut":""}" data-case="${esc(c.id)}"><div class="o">${caseItem(c)?folBtn(caseItem(c).id):""}<div class="ohd"><span class="pill">${esc(c.town)} · ${esc(c.place)}</span></div><h3>${esc(c.title)}</h3><p class="status">${esc(c.status)}</p>${lt?`<p class="latest"><b>Latest · ${fmt(lt.date)}</b> ${esc(lt.text)}</p>`:""}<p class="csum">${esc(c.summary)}</p><div class="cstats"><div><b>${fmt(first)}</b><span>Incident</span></div><div><b>${days}</b><span>Days open</span></div><div><b>${reports}</b><span>Reports</span></div></div><button type="button" class="ctog" data-col="${esc(c.id)}" aria-expanded="${!shut}">${shut?"Show full case ▾":"Collapse ▴"}</button></div><div class="l"><ul class="tl">${tl.map((t,k)=>`<li data-t="${esc(c.id)}-${k}" tabindex="0" role="button"><time>${fmt(t.date)}</time>${esc(t.text)} <b>${esc(t.source)} →</b></li>`).join("")}</ul></div></div>`}).join("")+fs.map(card).join("");
 }
 function sheetHTML(o){
- const u=safe(o.url),facts=(o.facts||[]).map(f=>`<div><b>${esc(f[1])}</b><span>${esc(f[0])}</span></div>`).join(""),body=(o.body&&o.body.length?o.body:[o.summary]).map(p=>`<p>${esc(p)}</p>`).join("");
+ const u=safe(o.url),facts=(o.facts||[]).map((f,k)=>/^(where|venue|location)$/i.test(f[0])&&o.id?`<a class="fmap" href="#m-${esc(o.id)}-${k}"><b>${esc(f[1])}</b><span>${esc(f[0])} · see map ›</span></a>`:`<div><b>${esc(f[1])}</b><span>${esc(f[0])}</span></div>`).join(""),body=(o.body&&o.body.length?o.body:[o.summary]).map(p=>`<p>${esc(p)}</p>`).join("");
  return `<div class="bar"><span>${esc(o.town)} · ${esc(o.cat)}</span><span class="acts"><button type="button" class="x" id="shClose" aria-label="Close">×</button></span></div>
  ${imgOK(o)||o.video?"":`<div class="art">${doodle(o.cat)}</div>`}
  <div class="meta"><time>${longDate(o.date)}</time><span>${esc(o.source)}</span>${ML[o.media]?`<span>${ML[o.media]}</span>`:""}</div>
@@ -346,7 +351,7 @@ function sheetHTML(o){
  <p class="note">Summary written by Oeste from ${esc(o.source)}'s reporting.</p>`;
 }
 function openSheet(o){if(!o)return closeSheet(true);sheet.style.background=TC[o.town]||"var(--lime)";shIn.innerHTML=sheetHTML(o);sheet.hidden=false;document.body.style.overflow="hidden";sheet.scrollTop=0;$("shClose").focus()}
-function closeSheet(silent){sheet.hidden=true;document.body.style.overflow="";if(!silent&&/^#([st]-|weather$|moon$|earth$|power$)/.test(location.hash))history.back()}
+function closeSheet(silent){sheet.hidden=true;document.body.style.overflow="";if(!silent&&/^#([stm]-|weather$|moon$|earth$|power$)/.test(location.hash))history.back()}
 function route(){
  const h=location.hash.slice(1);
  if(h.startsWith("s-")){const it=data.items.find(i=>"s-"+i.id===h);openSheet(it&&{...it,caseLink:!!it.case})}
@@ -356,6 +361,7 @@ function route(){
  else if(h==="moon")openPanel(moonHTML(),"var(--lilac)");
  else if(h==="earth")openPanel(earthHTML(),"#cfeee8");
  else if(h==="power")openPanel(utilHTML(),"#f7e3d3");
+ else if(/^m-.+-\d+$/.test(h)){const m=h.match(/^m-(.+)-(\d+)$/);openMap(m[1],+m[2])}
  else{closeSheet(true);if(h==="case")$("tracking").scrollIntoView({behavior:"smooth"})}
 }
 chips.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
@@ -615,6 +621,43 @@ function utilHTML(){const u=data.utilities||{};
  ${sec("Claro",u.claro||{},`<a href="https://www.claropr.com/" target="_blank" rel="noopener">Claro ↗</a> · Report a problem: *611 from a Claro phone or 787-775-0000`)}
  <div class="mread"><h5>Neighbors</h5><p><a href="https://www.facebook.com/groups/1026755354056860/" target="_blank" rel="noopener">Rincón outages Facebook group ↗</a></p></div>
  <p class="note">Status is checked during each news update against LUMA, Claro and news reports. It isn't live; for real-time status use the links above.</p>`}
+
+/* ---- Where → map ---- */
+const TOWNC={"Rincón":[18.3405,-67.2499],"Aguada":[18.3794,-67.1882],"Aguadilla":[18.4274,-67.1541],"Añasco":[18.2827,-67.1396],"Mayagüez":[18.2013,-67.1397]};
+const REFS=[["Rincón plaza",18.3405,-67.2499],["Punta Higüero lighthouse",18.3622,-67.2706]];
+let LL=null;
+function leaflet(){if(window.L)return Promise.resolve(window.L);if(LL)return LL;
+ LL=new Promise((ok,no)=>{const c=document.createElement("link");c.rel="stylesheet";c.href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css";document.head.appendChild(c);
+  const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";s.onload=()=>ok(window.L);s.onerror=()=>{LL=null;no()};document.head.appendChild(s)});return LL}
+async function geocode(place,town){const key="oeste-geo:"+place+"|"+town;try{const c=localStorage.getItem(key);if(c)return JSON.parse(c)}catch(e){}
+ const tries=[`${place}, ${town}, Puerto Rico`,`${place.replace(/^(calle|carr\.?|carretera|sector|urb\.?|barrio|bo\.?)\s+/i,"")}, ${town}, Puerto Rico`];
+ for(const q of tries){try{const r=await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=pr&q=${encodeURIComponent(q)}`,{headers:{"Accept-Language":"en"}});const j=await r.json();
+  if(j&&j[0]){const res={lat:+j[0].lat,lon:+j[0].lon,name:j[0].display_name,exact:true};try{localStorage.setItem(key,JSON.stringify(res))}catch(e){}return res}}catch(e){}}
+ const t=TOWNC[town]||TOWNC["Rincón"];return{lat:t[0],lon:t[1],exact:false}}
+let MAPO=null;
+async function openMap(id,fi){const it=data.items.find(i=>i.id===id);if(!it)return;const place=it.facts[fi][1],town=it.town;
+ sheet.style.background="var(--sky)";
+ shIn.innerHTML=`<div class="bar"><span>${esc(town)} · Map</span><button type="button" class="x" id="shClose" aria-label="Close">×</button></div>
+ <h3 id="shTitle">${esc(place)}</h3><div class="meta"><span id="mapNote">Finding it on the map…</span></div>
+ <div id="mapbox" class="mapbox"></div>
+ <p class="mlegend"><i class="mk mk1"></i>Roughly here <i class="mk mk2"></i>For reference</p>
+ <p id="mapLinks" class="ulinks"></p>
+ <p class="note">Map data © OpenStreetMap contributors, tiles © CARTO. Locations are approximate.</p>`;
+ sheet.hidden=false;document.body.style.overflow="hidden";sheet.scrollTop=0;
+ let L;try{L=await leaflet()}catch(e){$("mapNote").textContent="Couldn't load the map right now.";return}
+ const g=await geocode(place,town);if(!$("mapbox"))return;
+ $("mapNote").textContent=g.exact?`Approximate spot from OpenStreetMap`:`Couldn't pinpoint “${place}”, so this shows ${town}'s town center`;
+ if(MAPO){try{MAPO.remove()}catch(e){}}
+ MAPO=L.map("mapbox",{zoomControl:true,attributionControl:false}).setView([g.lat,g.lon],g.exact?15:14);
+ L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{maxZoom:19,subdomains:"abcd"}).addTo(MAPO);
+ L.circle([g.lat,g.lon],{radius:g.exact?180:600,color:"#151515",weight:1,fillColor:"#ff5f1f",fillOpacity:.25}).addTo(MAPO);
+ L.circleMarker([g.lat,g.lon],{radius:8,color:"#151515",weight:1.5,fillColor:"#ff5f1f",fillOpacity:1}).addTo(MAPO).bindTooltip(place,{permanent:true,direction:"top",offset:[0,-8],className:"mtip"});
+ const pts=[[g.lat,g.lon]];
+ for(const [n,la,lo] of REFS){if(Math.abs(la-g.lat)<.2&&Math.abs(lo-g.lon)<.2){L.circleMarker([la,lo],{radius:6,color:"#151515",weight:1.2,fillColor:"#fff",fillOpacity:1}).addTo(MAPO).bindTooltip(n,{permanent:true,direction:"right",offset:[8,0],className:"mtip mtip2"});pts.push([la,lo])}}
+ if(pts.length>1)MAPO.fitBounds(pts,{padding:[50,50],maxZoom:15});
+ setTimeout(()=>MAPO&&MAPO.invalidateSize(),60);
+ $("mapLinks").innerHTML=`<a href="https://maps.apple.com/?q=${encodeURIComponent(place+", "+town)}&ll=${g.lat},${g.lon}" target="_blank" rel="noopener">Open in Apple Maps ↗</a> · <a href="https://www.google.com/maps/search/?api=1&query=${g.lat},${g.lon}" target="_blank" rel="noopener">Google Maps ↗</a>`;
+}
 
 function load(){return fetch("news.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.json()).then(d=>{
  data=d;

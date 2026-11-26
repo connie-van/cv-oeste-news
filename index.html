@@ -90,6 +90,9 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
 .urow b{font-weight:600}
 .udot{display:inline-block;width:10px;height:10px;border-radius:50%;flex:none}
 .mread h5 .udot{vertical-align:3px}
+.ulive{font-size:13px;line-height:1.4;padding:8px 0 0;opacity:.8}.ulive b{font-weight:600}
+.urf{font:600 13px "Instrument Sans",sans-serif;background:none;border:1px solid #151515;border-radius:99px;padding:4px 10px;color:#151515;cursor:pointer}.urf[disabled]{opacity:.5}.urf i{display:inline-block;font-style:normal}.urf.spin i{animation:urspin .8s linear infinite}@keyframes urspin{to{transform:rotate(360deg)}}
+.ufocus{background:#ffd9c7;border-radius:4px;padding:0 4px}
 .fmap{display:block;padding:10px 8px 10px 0;border-bottom:1px solid var(--line);color:inherit;text-decoration:none}.fmap b{display:block;font:400 19px/1.2 Newsreader,Georgia,serif;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}.fmap span{font-size:12px}
 .mapbox{height:58vh;min-height:320px;border-radius:20px;overflow:hidden;margin-top:14px;border:1px solid var(--line);background:#e8e4da}
 .mlegend{font-size:13px;margin-top:10px!important;display:flex;align-items:center;gap:6px;flex-wrap:wrap}.mk{display:inline-block;width:12px;height:12px;border-radius:50%;border:1.3px solid #151515;margin-left:8px}.mk1{background:#ff5f1f;margin-left:0}.mk2{background:#fff}
@@ -572,8 +575,9 @@ $("wxTile").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.pr
 $("moonTile").addEventListener("click",()=>{location.hash="moon"});
 drawSky();loadWeather();setInterval(drawSky,6e5);
 $("earth").addEventListener("click",e=>{if(e.target.closest("[data-earth]"))location.hash="earth"});
-$("util").addEventListener("click",e=>{if(e.target.closest("[data-util]"))location.hash="power"});
-$("util").addEventListener("keydown",e=>{if(e.target.closest("[data-util]")&&(e.key==="Enter"||e.key===" ")){e.preventDefault();location.hash="power"}});
+$("util").addEventListener("click",e=>{const rb=e.target.closest("[data-urf]");if(rb){e.stopPropagation();refreshUtil(rb);return}if(e.target.closest("[data-util]"))location.hash="power"});
+shIn.addEventListener("click",e=>{const rb=e.target.closest("[data-urf]");if(rb)refreshUtil(rb)});
+$("util").addEventListener("keydown",e=>{if(!e.target.closest("[data-urf]")&&e.target.closest("[data-util]")&&(e.key==="Enter"||e.key===" ")){e.preventDefault();location.hash="power"}});
 $("earth").addEventListener("keydown",e=>{if(e.target.closest("[data-earth]")&&(e.key==="Enter"||e.key===" ")){e.preventDefault();location.hash="earth"}});
 
 /* ---- Earth watch: live NWS alerts + USGS quakes + researched notes ---- */
@@ -609,18 +613,43 @@ function earthHTML(){const notes=(data.earth||[]).slice().sort((a,b)=>b.date.loc
 const UST={ok:["#2a9d55","OK"],issue:["#d8400a","Outage"],unstable:["#e08a00","Unstable"],planned:["#d9a400","Planned work"],restored:["#2a9d55","Restored"],unknown:["#8a8a8a","Unknown"]};
 const dot=s=>`<i class="udot" style="background:${(UST[s]||UST.unknown)[0]}"></i>`;
 const tAgo=iso=>{const t=new Date(iso);if(isNaN(t))return"";return t.toLocaleString("en-US",{timeZone:TZ,month:"short",day:"numeric",hour:"numeric",minute:"2-digit"})};
+let LUMA=null;
+function loadLuma(){return fetch("luma.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.region)LUMA=j;return j}).catch(()=>null)}
+const nfmt=n=>Number(n||0).toLocaleString("en-US");
+const tcase=s=>String(s).toLowerCase().replace(/(^|[\s.\-\/])(\p{L})/gu,(m,a,b)=>a+b.toUpperCase());
+function lumaFresh(){return LUMA&&LUMA.region&&LUMA.checked&&(Date.now()-new Date(LUMA.checked))<3*3600e3}
+/* LUMA row: the 30-minute map check wins when it's newer than the news run, except it doesn't erase planned/unstable notes */
+function lumaRow(){const u=data.utilities||{},s=u.luma||{};if(!lumaFresh()||new Date(LUMA.checked)<new Date(u.checked||0))return s;
+ const a=LUMA.rincon||[],f=a.filter(x=>x.focus);
+ if(a.length)return{status:"issue",headline:f.length?`Out: ${f.map(x=>tcase(x.area)).join(", ")}`:`${a.length} area${a.length>1?"s":""} out in Rincón`};
+ if(["planned","unstable"].includes(s.status))return s;
+ return{status:"ok",headline:"No Rincón outages on LUMA's map"}}
+function liveLine(){if(!LUMA||!LUMA.region)return"";const r=LUMA.region,a=LUMA.rincon||[];
+ return `<div class="ulive">LUMA map: <b>${a.length?a.length+" Rincón area"+(a.length>1?"s":"")+" out":"no Rincón areas out"}</b> · ${nfmt(r.out)} without power in the Mayagüez region · checked ${esc(tAgo(LUMA.checked))}${lumaFresh()?"":" (check is behind)"}</div>`}
+async function refreshUtil(btn){if(btn){btn.disabled=true;btn.classList.add("spin")}
+ await Promise.all([loadLuma(),fetch("news.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.json()).then(d=>{data.utilities=d.utilities}).catch(()=>{})]);
+ drawUtil();if(location.hash==="#power"&&!sheet.hidden){shIn.innerHTML=utilHTML()}
+ const b=document.querySelector(location.hash==="#power"&&!sheet.hidden?"#shIn .urf, .sheet .urf":"#util .urf");if(b){b.innerHTML="Updated ✓";setTimeout(()=>{b.innerHTML="<i>↻</i> Refresh"},2000)}}
 function drawUtil(){const el=$("util"),u=data.utilities;if(!el)return;if(!u){el.innerHTML="";return}
  const row=(n,s)=>`<div class="urow">${dot(s.status)}<b>${n}</b><span>${esc(s.headline||(UST[s.status]||UST.unknown)[1])}</span></div>`;
- el.innerHTML=`<div class="item utilc" role="button" tabindex="0" data-util="1"><div class="meta"><b>Power &amp; internet</b><span>${esc(u.area||"Rincón")}</span></div>${row("LUMA",u.luma||{})}${row("Claro",u.claro||{})}<div class="foot"><span>Checked ${esc(tAgo(u.checked))}</span><span>More ›</span></div></div>`}
+ el.innerHTML=`<div class="item utilc" role="button" tabindex="0" data-util="1"><div class="meta"><b>Power &amp; internet</b><span>${esc(u.area||"Rincón")}</span></div>${row("LUMA",lumaRow())}${row("Claro",u.claro||{})}${liveLine()}<div class="foot"><span>News check ${esc(tAgo(u.checked))}</span><button type="button" class="urf" data-urf="1" aria-label="Refresh power status"><i>↻</i> Refresh</button><span>More ›</span></div></div>`}
+function lumaSec(){if(!LUMA||!LUMA.region)return`<div class="mread"><h5>${dot("unknown")} LUMA outage map</h5><p>The automatic check hasn't run yet.</p></div>`;
+ const r=LUMA.region,a=LUMA.rincon||[],L=lumaRow();
+ const list=a.length?`<p>Areas in Rincón listed without service:</p>`+a.map(x=>`<p class="asp">${x.focus?`<span class="ufocus">${esc(tcase(x.area))}</span> (your area)`:esc(tcase(x.area))}</p>`).join(""):`<p>No areas in Rincón are listed without service.</p>`;
+ return `<div class="mread"><h5>${dot(a.length?"issue":"ok")} LUMA outage map</h5>${list}
+ <p class="asp">Mayagüez region (includes Rincón): ${nfmt(r.out)} of ${nfmt(r.total)} customers without power${r.planned?`, ${nfmt(r.planned)} in planned outages`:""}${r.loadShed?`, ${nfmt(r.loadShed)} in load shedding`:""}.</p>
+ <p class="asp"><small>Checked ${esc(tAgo(LUMA.checked))}${LUMA.lumaTime?` · LUMA's data from ${esc(LUMA.lumaTime)}`:""}${LUMA.ok===false?` · latest attempt failed, showing the last good check`:""}</small></p>
+ <p class="ulinks"><a href="https://miluma.lumapr.com/outages/outageMap" target="_blank" rel="noopener">LUMA outage map ↗</a></p></div>`}
 function utilHTML(){const u=data.utilities||{};
  const sec=(n,s,links)=>`<div class="mread"><h5>${dot(s.status)} ${n}: ${esc(s.headline||"")}</h5><p>${esc(s.detail||"")}</p>${(s.updates||[]).slice().sort((a,b)=>String(b.time).localeCompare(String(a.time))).map(x=>{const xu=safe(x.url);return `<p class="asp"><small>${esc(tAgo(x.time))}</small><br>${esc(x.text)} ${xu?`<a href="${esc(xu)}" target="_blank" rel="noopener">${esc(x.source)} ↗</a>`:esc(x.source||"")}</p>`}).join("")}<p class="ulinks">${links}</p></div>`;
  return `<div class="bar"><span>Power &amp; internet</span><button type="button" class="x" id="shClose" aria-label="Close">×</button></div>
  <h3 id="shTitle">${esc(u.area||"Rincón")}</h3>
- <div class="meta"><span>Last checked ${esc(tAgo(u.checked))}</span></div>
- ${sec("LUMA",u.luma||{},`<a href="https://lumapr.com/" target="_blank" rel="noopener">LUMA service status ↗</a> · <a href="https://lumapr.com/mejorasplanificadas/" target="_blank" rel="noopener">Planned work ↗</a>`)}
+ <div class="meta"><span>News check ${esc(tAgo(u.checked))}</span> <button type="button" class="urf" data-urf="1"><i>↻</i> Refresh</button></div>
+ ${lumaSec()}
+ ${sec("LUMA · news & planned work",u.luma||{},`<a href="https://lumapr.com/" target="_blank" rel="noopener">LUMA service status ↗</a> · <a href="https://lumapr.com/mejorasplanificadas/" target="_blank" rel="noopener">Planned work ↗</a>`)}
  ${sec("Claro",u.claro||{},`<a href="https://www.claropr.com/" target="_blank" rel="noopener">Claro ↗</a> · Report a problem: *611 from a Claro phone or 787-775-0000`)}
  <div class="mread"><h5>Neighbors</h5><p><a href="https://www.facebook.com/groups/1026755354056860/" target="_blank" rel="noopener">Rincón outages Facebook group ↗</a></p></div>
- <p class="note">Status is checked during each news update against LUMA, Claro and news reports. It isn't live; for real-time status use the links above.</p>`}
+ <p class="note">LUMA's outage map is checked automatically every 30 minutes; Refresh shows the latest check. Claro and LUMA news are checked during each news update, twice a day.</p>`}
 
 /* ---- Where → map ---- */
 const TOWNC={"Rincón":[18.3405,-67.2499],"Aguada":[18.3794,-67.1882],"Aguadilla":[18.4274,-67.1541],"Añasco":[18.2827,-67.1396],"Mayagüez":[18.2013,-67.1397]};
@@ -675,7 +704,7 @@ function load(){return fetch("news.json?t="+Date.now(),{cache:"no-store"}).then(
  if(!isNaN(u)){const day=x=>x.toLocaleDateString("en-CA",{timeZone:"America/Puerto_Rico"}),tm=u.toLocaleString("en-US",{hour:"numeric",minute:"2-digit",timeZone:"America/Puerto_Rico"});$("upd").textContent="Updated "+(day(u)===day(new Date())?tm:u.toLocaleString("en-US",{month:"short",day:"numeric",timeZone:"America/Puerto_Rico"})+", "+tm)}
  drawUtil();drawTracking();drawList();drawCal();drawEarth();route();
 }).catch(()=>{list.innerHTML=`<p class="empty">Couldn't load the news right now. Pull down to refresh.</p>`})}
-load().then(loadEarth);
+load().then(loadEarth);loadLuma().then(()=>data&&drawUtil());
 const ptr=$("ptr"),wrap=document.querySelector(".wrap"),TH=72,HOLD=64;let y0=null,pull=0,busy=false,armed=false;
 const hap=(()=>{let lb=null;try{lb=document.createElement("label");lb.setAttribute("aria-hidden","true");lb.style.cssText="position:fixed;left:-99px;top:0;opacity:0;pointer-events:none";const i=document.createElement("input");i.type="checkbox";i.setAttribute("switch","");lb.appendChild(i);document.body.appendChild(lb)}catch(e){}
  return()=>{try{if(navigator.vibrate)navigator.vibrate(12);else if(lb)lb.click()}catch(e){}}})();
@@ -688,7 +717,7 @@ async function refresh(){
  try{const r=await fetch(location.pathname+"?v="+Date.now(),{cache:"no-store"});const t=await r.text();
   pageChanged=r.ok&&t.includes('data-build="')&&!t.includes('data-build="'+BUILD+'"');}catch(e){}
  if(pageChanged){try{await fetch(location.pathname,{cache:"reload"})}catch(e){}location.reload();return}
- await Promise.all([load(),loadWeather(),loadEarth()]);
+ await Promise.all([load(),loadWeather(),loadEarth(),loadLuma()]);drawUtil();
  await new Promise(r=>setTimeout(r,Math.max(0,600-(Date.now()-t0))));
  ptr.classList.remove("spin");setP(0,true);busy=false;
 }

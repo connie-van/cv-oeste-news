@@ -27,6 +27,7 @@ news.json has a "utilities" object: {checked, area, luma:{status, headline, deta
 - Each run, check: LUMA's service status and planned-work list (lumapr.com, lumapr.com/mejorasplanificadas), LUMA and Claro Puerto Rico posts, and news about outages, load shedding (relevos de carga), brownouts, voltage drops or fiber cuts affecting Rincón or the Mayagüez region. If the Rincón outages Facebook group (https://www.facebook.com/groups/1026755354056860/) is readable without logging in, use posts there only as leads, and say "neighbors report" unless an official source or news outlet confirms.
 - status is one of: ok, issue (outage), unstable (brownouts, flickering, slow or intermittent service), planned (scheduled work), restored, unknown. headline is a few words ("Outage in pueblo since 2 p.m."); detail is 1–3 sentences on what's affected and what's known.
 - Add an entry to updates [{time (ISO with -04:00), text, source, url}] whenever something changes: a new outage, an estimated restoration time, crews on site, service restored. Keep older entries; drop entries older than 14 days.
+- luma.json is written every 30 minutes by a GitHub Action (LUMA's outage map: Mayagüez region totals and Rincón areas without service). Never edit it; you may read it as a source for LUMA status.
 - Always set "checked" to the current time, even when nothing changed. Never claim a service is working or down without a source; if you can't tell, use unknown.
 
 ## Earth watch

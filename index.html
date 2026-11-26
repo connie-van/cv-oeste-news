@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-build="a388aba5">
+<html lang="en" data-build="76f0efa3">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -96,7 +96,12 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
 .enote .et{display:block;font:400 21px/1.2 Newsreader,Georgia,serif;margin:4px 0}.enote .es{display:block;font-size:15px}.enote p{font-size:16px;line-height:1.55;margin:10px 0 0}
 .enote[open] summary .es{display:none}.mread a{color:#151515;font-weight:600}
 .srcl{display:inline-block;margin-top:10px;color:#151515;font-weight:600}
-.item .foot{gap:10px}.item .foot>span{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.item .foot{gap:10px}
+.item.read{padding:12px 18px;filter:grayscale(.55);opacity:.6}
+.item.read h4{font-size:18px;margin-top:4px}
+.item.read .meta{font-size:12px}
+.item.swiping{transition:none!important}
+#list,#tracking{overflow-x:clip}.item .foot>span{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
 .cal{background:var(--card,light-dark(#fff,#1d1d1d));border:1.5px solid var(--soft);border-radius:24px;padding:14px 16px;margin:10px 0 4px}
 .cal[hidden]{display:none}
 .calhd{display:flex;justify-content:space-between;align-items:center}
@@ -273,6 +278,9 @@ const saveFol=()=>{try{localStorage.setItem("oeste-follow",JSON.stringify([...FO
 const RIB='<svg viewBox="0 0 13 16" aria-hidden="true"><path d="M1.5 1.5h10v13L6.5 11l-5 3.5Z" fill="none" stroke="#151515" stroke-width="1.6" stroke-linejoin="round"/></svg>';
 const EAR='<svg viewBox="0 0 40 40" aria-hidden="true"><path class="cut" d="M0 0H40V40Z"/><path class="flap" d="M1 1L39 39H6Q1 39 1 34Z"/></svg>';
 const folBtn=id=>`<button type="button" class="ear" data-f="${esc(id)}" aria-pressed="${FOL.has(id)}" aria-label="${FOL.has(id)?"Unfollow":"Follow"} story">${EAR}</button>`;
+let READ=new Set();try{READ=new Set(JSON.parse(localStorage.getItem("oeste-read")||"[]"))}catch(e){}
+const saveRead=()=>{try{localStorage.setItem("oeste-read",JSON.stringify([...READ]))}catch(e){}};
+let SWIPING=false;
 let COL=new Set();try{COL=new Set(JSON.parse(localStorage.getItem("oeste-collapsed")||"[]"))}catch(e){}
 const caseItem=c=>data.items.find(i=>i.case===c.id);
 const caseFollowed=c=>{const it=caseItem(c);return it?FOL.has(it.id):true};
@@ -287,6 +295,7 @@ const todayISO=()=>new Date().toLocaleDateString("en-CA",{timeZone:"America/Puer
 
 function drawChips(){chips.innerHTML=TOWNS.map(t=>`<button type="button" data-t="${esc(t)}" aria-pressed="${t===town}">${esc(t)}</button>`).join("")+`<button type="button" id="calBtn" aria-pressed="${calOpen||!!day}">Calendar</button>`}
 function card(i){const m=ML[i.media];
+ if(READ.has(i.id))return `<div class="item read" role="button" tabindex="0" data-s="${esc(i.id)}" style="--c:${TC[i.town]||"var(--sky)"};--cd:${TCD[i.town]||"#86aef7"};background:var(--c)">${folBtn(i.ref||i.id)}<div class="meta"><b>${esc(i.town)}</b><span>${esc(i.cat)}</span><time>${fmt(i.date)}</time></div><h4>${esc(i.title)}</h4></div>`;
  return `<div class="item" role="button" tabindex="0" data-s="${esc(i.id)}" style="--c:${TC[i.town]||"var(--sky)"};--cd:${TCD[i.town]||"#86aef7"};background:var(--c)">${folBtn(i.ref||i.id)}<div class="hd"><div><div class="meta"><b>${esc(i.town)}</b><span>${esc(i.cat)}</span><time>${fmt(i.date)}</time></div><h4>${esc(i.title)}</h4></div>${imgOK(i)?"":doodle(i.cat)}</div>${picHTML(i)}<p>${esc(i.summary)}</p><div class="foot"><span>${esc(i.source)} ${i.ref?`<span class="flag">Update</span>`:lastUpd(i)?`<span class="flag">Updated ${fmt(lastUpd(i))}</span>`:m?`<span class="media">${m}</span>`:""}</span></div></div>`}
 function lastUpd(i){const u=i.updates||[];return u.length?u.map(x=>x.date).sort().pop():""}
 function drawList(){
@@ -296,9 +305,10 @@ function drawList(){
  $("daybar").hidden=!day;
  if(day)$("dayLabel").textContent=longDate(day);
  if(!items.length){list.innerHTML=`<p class="empty">${day?"No stories saved for this day"+(town!=="All"?" in "+esc(town):"")+".":"No stories match."}</p>`;return}
- if(town==="All"&&!day){const r=items.filter(i=>i.town==="Rincón"),o=items.filter(i=>i.town!=="Rincón");
+ const rd=(a,b)=>READ.has(a.id)-READ.has(b.id);
+ if(town==="All"&&!day){const r=items.filter(i=>i.town==="Rincón").sort(rd),o=items.filter(i=>i.town!=="Rincón").sort(rd);
   list.innerHTML=(r.length?`<h2>Rincón</h2>`+r.map(card).join(""):"")+(o.length?`<h2>Nearby</h2>`+o.map(card).join(""):"");
- }else{items.sort((a,b)=>(b.town==="Rincón")-(a.town==="Rincón")||b.date.localeCompare(a.date));list.innerHTML=items.map(card).join("")}
+ }else{items.sort((a,b)=>rd(a,b)||(b.town==="Rincón")-(a.town==="Rincón")||b.date.localeCompare(a.date));list.innerHTML=items.map(card).join("")}
 }
 function drawCal(){
  const cal=$("cal");cal.hidden=!calOpen;if(!calOpen)return;
@@ -314,7 +324,7 @@ function drawCal(){
 }
 function drawTracking(){
  const el=$("tracking"),cs=(data.tracking||[]).filter(caseFollowed),caseIds=new Set((data.tracking||[]).map(c=>caseItem(c)&&caseItem(c).id));
- const fs=data.items.filter(i=>FOL.has(i.id)&&!caseIds.has(i.id)).sort((a,b)=>b.date.localeCompare(a.date));
+ const fs=data.items.filter(i=>FOL.has(i.id)&&!caseIds.has(i.id)).sort((a,b)=>READ.has(a.id)-READ.has(b.id)||b.date.localeCompare(a.date));
  if(!cs.length&&!fs.length){el.innerHTML="";return}
  el.innerHTML=`<h2>Following</h2>`+cs.map(c=>{const tl=c.timeline||[],first=tl.length?tl[tl.length-1].date:"",days=first?Math.max(0,Math.round((Date.now()-new Date(first+"T12:00:00"))/864e5)):"–",reports=tl.filter(t=>safe(t.url)).length;
   const shut=COL.has(c.id),lt=tl[0];
@@ -630,9 +640,26 @@ async function refresh(){
  await new Promise(r=>setTimeout(r,Math.max(0,600-(Date.now()-t0))));
  ptr.classList.remove("spin");setP(0,true);busy=false;
 }
+/* swipe left = read, swipe right = unread */
+{let sw=null;
+ const host=e=>{const it=e.target.closest(".item[data-s]");return it&&(it.closest("#list")||it.closest("#tracking"))?it:null};
+ document.addEventListener("touchstart",e=>{if(e.touches.length>1||!sheet.hidden)return;const it=host(e);if(!it||e.target.closest(".ear"))return;sw={it,x:e.touches[0].clientX,y:e.touches[0].clientY,dx:0,on:false}},{passive:true});
+ document.addEventListener("touchmove",e=>{if(!sw)return;const dx=e.touches[0].clientX-sw.x,dy=e.touches[0].clientY-sw.y;
+  if(!sw.on){if(Math.abs(dx)<12&&Math.abs(dy)<12)return;if(Math.abs(dx)<Math.abs(dy)*1.3){sw=null;return}sw.on=true;SWIPING=true;sw.it.classList.add("swiping")}
+  if(e.cancelable)e.preventDefault();const isRead=sw.it.classList.contains("read");sw.dx=isRead?Math.max(0,dx):Math.min(0,dx);
+  sw.it.style.transform=`translateX(${sw.dx}px)`;sw.it.style.opacity=String(1-Math.min(.5,Math.abs(sw.dx)/400))},{passive:false});
+ const end=()=>{if(!sw)return;const s=sw;sw=null;setTimeout(()=>{SWIPING=false},0);if(!s.on)return;s.it.classList.remove("swiping");
+  const id=s.it.dataset.s,done=Math.abs(s.dx)>90;
+  if(done){s.it.style.transition="transform .2s ease,opacity .2s ease";s.it.style.transform=`translateX(${s.dx<0?-110:110}%)`;s.it.style.opacity="0";try{hap()}catch(x){}
+   setTimeout(()=>{s.dx<0?READ.add(id):READ.delete(id);saveRead();drawList();drawTracking()},190)}
+  else{s.it.style.transition="transform .2s ease,opacity .2s ease";s.it.style.transform="";s.it.style.opacity="";setTimeout(()=>{s.it.style.transition=""},220)}
+  s.it.dataset.swiped="1";setTimeout(()=>{delete s.it.dataset.swiped},300)};
+ document.addEventListener("touchend",end);document.addEventListener("touchcancel",end);
+ document.addEventListener("click",e=>{const it=e.target.closest(".item[data-swiped]");if(it){e.stopPropagation();e.preventDefault()}},true);
+}
 const damp=d=>d<=0?0:160*(1-Math.exp(-d/260));
 window.addEventListener("touchstart",e=>{if(busy||!sheet.hidden||window.scrollY>0||e.touches.length>1){y0=null;return}y0=e.touches[0].clientY;pull=0;armed=false},{passive:true});
-window.addEventListener("touchmove",e=>{if(y0===null)return;const d=e.touches[0].clientY-y0;if(window.scrollY>0||d<0){if(pull)setP(0,true);pull=0;return}
+window.addEventListener("touchmove",e=>{if(y0===null||SWIPING)return;const d=e.touches[0].clientY-y0;if(window.scrollY>0||d<0){if(pull)setP(0,true);pull=0;return}
  pull=damp(d);if(e.cancelable)e.preventDefault();setP(pull,false);
  if(pull>=TH&&!armed){armed=true;hap()}else if(pull<TH&&armed)armed=false},{passive:false});
 window.addEventListener("touchcancel",()=>{y0=null;pull=0;armed=false;if(!busy)setP(0,true)});

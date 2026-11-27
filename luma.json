@@ -1,15 +1,21 @@
 {
- "checked": "2026-11-27T11:30-04:00",
+ "checked": "2026-11-27T19:41-04:00",
  "ok": true,
  "error": null,
- "lumaTime": "11/27/2026 11:30 AM",
+ "lumaTime": "11/27/2026 07:40 PM",
  "region": {
   "name": "Mayagüez",
   "total": 216605,
-  "out": 39,
+  "out": 199,
   "planned": 0,
   "loadShed": 0,
-  "pctOut": 0.02
+  "pctOut": 0.09
  },
- "rincon": []
+ "rincon": [
+  {
+   "area": "RINCON",
+   "zone": "BO CALVACHE",
+   "focus": false
+  }
+ ]
 }

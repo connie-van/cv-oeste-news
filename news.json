@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-25T17:50:00-04:00",
+  "updated": "2026-11-26T23:55:00-04:00",
   "tracking": [
     {
       "id": "flamas",
@@ -10,12 +10,12 @@
       "summary": "Alejandro Chaparro Ruiz, 66, of Aguada, was shot in the abdomen around 1:24 a.m. on Friday, Nov 20, in front of Restaurante Flamas. He was moved from Hospital Buen Samaritano to Centro Médico in Río Piedras, where he died that day. Police now classify it as a murder. The CIC Aguadilla Homicide Division is investigating; no suspect or arrest has been reported.",
       "timeline": [
         {
-          "date": "2026-11-25",
+          "date": "2026-11-26",
           "text": "Checked again: no suspect, motive or arrest has been reported since Chaparro's death.",
           "source": "Daily check",
           "url": "",
           "body": [
-            "No follow-up reporting on an arrest, a suspect or a motive turned up in Puerto Rico outlets as of Nov 25.",
+            "No follow-up reporting on an arrest, a suspect or a motive turned up in Puerto Rico outlets as of Nov 26.",
             "The CIC Aguadilla Homicide Division is handling the case as a murder."
           ]
         },
@@ -726,6 +726,126 @@
       ],
       "source": "El Nuevo Día",
       "url": "https://www.elnuevodia.com/noticias/el-tiempo/notas/cuidado-advierten-sobre-peligrosas-condiciones-maritimas-de-cara-al-dia-de-accion-de-gracias/"
+    },
+    {
+      "id": "agu-patrol-1126",
+      "town": "Aguada",
+      "date": "2026-11-26",
+      "cat": "Accident",
+      "title": "Police patrol truck hit head-on on PR-417; four hurt",
+      "summary": "Three Aguada officers and the other driver were hurt early Thanksgiving morning when a car reportedly crossed into the patrol's lane in barrio Mal Paso. All four are stable.",
+      "source": "El Nuevo Día",
+      "url": "https://www.elnuevodia.com/noticias/seguridad/notas/cuatro-personas-heridas-en-accidente-que-involucra-un-vehiculo-de-la-policia-en-aguada/",
+      "facts": [
+        [
+          "When",
+          "Thu, Nov 26, about 2:55 a.m."
+        ],
+        [
+          "Where",
+          "PR-417 km 1.3, Sector La Gran Vía, Bo. Mal Paso"
+        ],
+        [
+          "Injured",
+          "2 officers, a sergeant and the other driver"
+        ],
+        [
+          "Condition",
+          "All stable"
+        ]
+      ],
+      "body": [
+        "Two officers and a sergeant from the Aguada police district were riding in a Dodge Ram patrol truck when the driver of a Volkswagen Jetta apparently drifted into their lane and hit them, according to preliminary police information.",
+        "All four people were taken to nearby hospitals and were reported in stable condition. Aguada district agents are investigating; no charges have been reported.",
+        "Metro PR reported the same details."
+      ]
+    },
+    {
+      "id": "may-pr106-1126",
+      "town": "Mayagüez",
+      "date": "2026-11-26",
+      "cat": "Power",
+      "title": "Downed power lines partly close PR-106 in Quemado",
+      "summary": "Fallen electrical cables forced a partial closure of PR-106 at km 3.1, at the Cuesta de los Coco in barrio Quemado. Traffic was detoured via PR-351 and PR-325.",
+      "source": "Primera Hora",
+      "url": "https://www.primerahora.com/noticias/policia-tribunales/notas/anuncian-cierre-parcial-de-carretera-en-mayaguez-por-caida-de-tendido-electrico/",
+      "facts": [
+        [
+          "When",
+          "Thu, Nov 26"
+        ],
+        [
+          "Where",
+          "PR-106 km 3.1, Cuesta de los Coco, Bo. Quemado"
+        ],
+        [
+          "Detours",
+          "PR-351 km 2.0 and PR-325 km 5.8"
+        ]
+      ],
+      "body": [
+        "Mayagüez municipal police announced the partial closure after power lines came down on the road. Municipal emergency-management staff and officers were on site.",
+        "Drivers were asked to use alternate routes and take care until crews finished. The report didn't say whether nearby homes lost power or when the road would fully reopen."
+      ]
+    },
+    {
+      "id": "may-luma-1129",
+      "town": "Mayagüez",
+      "date": "2026-11-29",
+      "cat": "Power",
+      "title": "LUMA pole work Sunday in Garnier, Nadal and Río Cristal",
+      "summary": "LUMA scheduled pole-hardening work from 7 a.m. to 6 p.m. on Sunday, Nov 29, across several Mayagüez neighborhoods, which can mean planned outages.",
+      "source": "LUMA",
+      "url": "https://lumapr.com/mejorasplanificadas/",
+      "facts": [
+        [
+          "When",
+          "Sun, Nov 29"
+        ],
+        [
+          "Hours",
+          "7 a.m.–6 p.m."
+        ],
+        [
+          "Where",
+          "Barriadas Garnier and Nadal, Río Cristal condos, Reparto Brisas de Río Hondo, Lomas Verdes"
+        ],
+        [
+          "Work",
+          "Pole hardening"
+        ]
+      ],
+      "body": [
+        "LUMA's planned-improvements list includes pole-resilience work on Sunday covering Barriadas Garnier and Nadal, the municipal cemetery area, Reparto Brisas de Río Hondo, Reparto Lomas Verdes and several Río Cristal clusters, among others.",
+        "LUMA also listed load-balancing work in barrio Quemado along PR-106 on Tuesday, Dec 1, from 7 a.m. to 6 p.m."
+      ]
+    },
+    {
+      "id": "agu-luma-1201",
+      "town": "Aguada",
+      "date": "2026-12-01",
+      "cat": "Power",
+      "title": "More LUMA pole work Dec 1–3 in Aguada",
+      "summary": "LUMA listed three days of pole-hardening work: Aguada Gardens on Dec 1, Parcelas Tablonal on Dec 2 and Sector Los Maldonado in Tablonal on Dec 3.",
+      "source": "LUMA",
+      "url": "https://lumapr.com/mejorasplanificadas/",
+      "facts": [
+        [
+          "Dec 1",
+          "Residencial Aguada Gardens, 7 a.m.–6 p.m."
+        ],
+        [
+          "Dec 2",
+          "Parcelas Tablonal, 7 a.m.–6 p.m."
+        ],
+        [
+          "Dec 3",
+          "Bo. Tablonal, Sector Los Maldonado (Carr. 115 km 26), 8 a.m.–6 p.m."
+        ]
+      ],
+      "body": [
+        "The work is part of LUMA's pole-resilience program, which already hit Parcelas Tablonal on Nov 23. Residents in these areas may see planned interruptions during work hours."
+      ]
     }
   ],
   "earth": [
@@ -757,13 +877,19 @@
     }
   ],
   "utilities": {
-    "checked": "2026-11-25T19:30:00-04:00",
+    "checked": "2026-11-26T23:55:00-04:00",
     "area": "Rincón pueblo · Villa Angélica · Corea",
     "luma": {
       "status": "ok",
-      "headline": "No outage reported",
-      "detail": "No outage or load-shedding reports found for Rincón's pueblo area. LUMA had scheduled equipment work on Calle Caney in Rincón for Nov 25, which could cause brief interruptions.",
+      "headline": "No Rincón outage on LUMA's map",
+      "detail": "LUMA's outage map listed no Rincón areas without service at 7:15 p.m. Nov 26, though about 16,500 customers (7.6%) were out across the Mayagüez region that evening. No planned work is listed for Rincón.",
       "updates": [
+        {
+          "time": "2026-11-26T19:15:00-04:00",
+          "text": "About 16,500 customers were without power across LUMA's Mayagüez region; no Rincón areas were listed.",
+          "source": "LUMA outage map",
+          "url": "https://miluma.lumapr.com/outages/outageMap"
+        },
         {
           "time": "2026-11-25T07:00:00-04:00",
           "text": "LUMA listed installation of automated equipment on Calle Caney in Rincón for today; brief interruptions possible.",
@@ -775,7 +901,7 @@
     "claro": {
       "status": "ok",
       "headline": "No outage reported",
-      "detail": "No reports of Claro internet, mobile or TV problems in Rincón or western Puerto Rico.",
+      "detail": "No Claro internet, mobile or TV problems for Rincón or western Puerto Rico turned up in news reports as of Nov 26.",
       "updates": []
     }
   }
